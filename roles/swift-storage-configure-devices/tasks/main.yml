@@ -1,0 +1,63 @@
+#---------------------------------------------------------------------------
+# Copyright IBM Corp. 2015, 2015 All Rights Reserved
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# Limitations under the License.
+#---------------------------------------------------------------------------
+# Written By George Goldberg (georgeg@il.ibm.com)
+---
+- name: ensure file-system packages are installed
+  apt: 
+    pkg: "{{ item }}"
+    state: latest 
+    force: yes
+  with_items: fs_packages
+  when: ansible_os_family == 'Debian'
+
+- name: ensure file-system packages are installed
+  yum: 
+    pkg: "{{ item }}"
+    state: latest 
+  with_items: fs_packages
+  when: ansible_os_family == 'RedHat'
+
+- name: create filesystems on devices
+  filesystem: 
+    fstype: "{{ item.fs }}" 
+    dev: "/dev/{{ item.name }}" 
+    force: yes
+  with_items: storage_devices
+
+- name: create device directories
+  file:
+    path: "/srv/node/{{ item.name }}"
+    owner: "swift"
+    group: "swift"
+    mode: 0750
+    state: directory
+  with_items: storage_devices
+
+- name: mount device directories
+  mount: 
+    name: "/srv/node/{{ item.name }}" 
+    src: "/dev/{{ item.name }}" 
+    fstype: "{{ item.fs }}"
+    opts: "{{ fs[item.fs].mount_options  }}"
+    state: mounted
+  with_items: storage_devices
+
+- name: ensure /srv/node is owned by swift
+  file:
+    path: /srv/node
+    owner: "swift"
+    group: "swift"
+    recurse: yes
+    state: directory

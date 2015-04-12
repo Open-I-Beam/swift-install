@@ -1,0 +1,127 @@
+#---------------------------------------------------------------------------
+# Copyright IBM Corp. 2015, 2015 All Rights Reserved
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# Limitations under the License.
+#---------------------------------------------------------------------------
+# Written By George Goldberg (georgeg@il.ibm.com)
+---
+- name: ensure keystone packages are installed
+  yum: 
+    pkg: "{{ item }}"
+    state: latest 
+  with_items: redhat_packages
+
+- name: ensure mysql packages are installed
+  yum: 
+    pkg: "{{ item }}"
+    state: latest 
+  with_items: redhat_mysql_packages
+
+- name: ensure services are stopped
+  service: 
+    name: "{{ item }}"
+    state: stopped
+  with_items: redhat_services
+
+- name: ensure mysql services are started
+  service: 
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+  with_items: redhat_mysql_services
+    
+- name: ensure keystone database is created
+  mysql_db:
+    name: keystone
+    state: present 
+
+- name: create keystone user for mysql
+  mysql_user:
+    name: keystone 
+    password: keystone 
+    priv: "keystone.*:ALL" 
+    state: present
+
+- name: ensure database is synced
+  command: /usr/bin/keystone-manage db_sync
+
+# probably the former command should have been run by user
+# keystone , because the log becomes owned by uid 0 for some reason
+- name: ensure that /var/log/keystone is owned by keystone
+  file: 
+    path: /var/log/keystone
+    owner: keystone
+    group: keystone
+    recurse: yes
+    state: directory
+
+- name: ensure services are started and enabled
+  service: 
+    name: "{{ item }}"
+    state: restarted 
+    enabled: yes
+  with_items: redhat_services
+
+# keystone seems to take a while...
+- name: wait for keystone to come back up
+  wait_for: 
+    port: 35357
+
+- name: create service tenant
+  keystone_user: 
+    endpoint: "{{ keystone_admin_url }}"
+    token: "{{ keystone_admin_token }}" 
+    tenant: service 
+    tenant_description: "Service Tenant"
+
+- name: add keystone endpoint information
+  keystone_service: 
+    endpoint: "{{ keystone_admin_url }}"
+    token: "{{ keystone_admin_token }}" 
+    region: "{{ openstack_region }}"
+    name: keystone
+    type: identity
+    description: "Identity Service"
+    public_url: "{{ keystone_public_url }}"
+    internal_url: "{{ keystone_internal_url }}"
+    admin_url: "{{ keystone_admin_url }}"
+
+- name: create admin tenant
+  keystone_user: 
+    endpoint: "{{ keystone_admin_url }}"
+    token: "{{ keystone_admin_token }}" 
+    tenant: admin
+    tenant_description: "Admin Tenant"
+
+- name: create admin user
+  keystone_user: 
+    endpoint: "{{ keystone_admin_url }}"
+    token: "{{ keystone_admin_token }}" 
+    tenant: admin
+    user: admin 
+    password: "{{ keystone_admin_password }}"
+
+- name: create admin role and associate it with admin user
+  keystone_user: 
+    endpoint: "{{ keystone_admin_url }}"
+    token: "{{ keystone_admin_token }}" 
+    tenant: admin
+    user: admin 
+    role: admin
+
+- name: create Member role and associate it with admin user
+  keystone_user: 
+    endpoint: "{{ keystone_admin_url }}"
+    token: "{{ keystone_admin_token }}" 
+    tenant: admin
+    user: admin 
+    role: Member

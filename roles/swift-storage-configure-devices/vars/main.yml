@@ -1,0 +1,52 @@
+#---------------------------------------------------------------------------
+# Copyright IBM Corp. 2015, 2015 All Rights Reserved
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# Limitations under the License.
+#---------------------------------------------------------------------------
+# Written By George Goldberg (georgeg@il.ibm.com)
+---
+fs: {
+  "xfs": {
+    "mount_options": "noatime,nodiratime,nobarrier,logbufs=8",
+    "packages" : {
+       RedHat: [ "xfsprogs" ],
+       Debian: [ "xfsprogs" ]
+    }
+  },
+  "ext4": {
+    "mount_options": "noatime,nodiratime,nobarrier",
+    "packages" : { 
+       RedHat: [ ], 
+       Debian: [ ]
+    }
+  },
+  "f2fs": {
+    "mount_options": "noatime,nodiratime,nobarrier,logbufs=8",
+    "packages" : {
+      RedHat: [ "f2fs-tools" , "linux-image-extra-3.13.0-43-generic" ], 
+      Debian: [ "f2fs-tools" , "linux-image-extra-3.13.0-43-generic" ] 
+    }   
+  }
+}
+
+
+object_devices: "{{ swift_devices.object_devices  | list  }}" 
+container_devices: "{{ swift_devices.container_devices  | list  }}" 
+account_devices: "{{ swift_devices.account_devices | list | union(container_devices) | union(object_devices) }}" 
+storage_devices: "{{ account_devices }}"
+
+fs_list: "{{ storage_devices | map(attribute='fs') | unique | list }}"
+
+
+fs_packages_str: "{% for f in fs_list %} {{ fs[f].packages[ansible_os_family] | join }} {% endfor %}" 
+
+fs_packages: "{{ fs_packages_str.split() }}"
