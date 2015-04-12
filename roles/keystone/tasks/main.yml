@@ -14,9 +14,6 @@
 #---------------------------------------------------------------------------
 # Written By George Goldberg (georgeg@il.ibm.com)
 ---
-- name: Get Keystone module for Ansible
-  local_action:git: repo=https://github.com/openstack-ansible/openstack-ansible-modules/blob/master/keystone_service dest=../../openstack-ansible-modules/
-
 - include: Debian.yml
   when: ansible_os_family == 'Debian'
 

@@ -14,12 +14,8 @@
 #---------------------------------------------------------------------------
 # Written By George Goldberg (georgeg@il.ibm.com)
 ---
-- include: swift-add-repositories.yml 
-- include: pull_keystone_service_module.yml
-- include: keystone.yml
-- include: swift-proxy-install.yml
-- include: swift-proxy-configure.yml
-- include: swift-storage-install.yml
-- include: swift-storage-configure.yml
-- include: swift-create-and-distribute-rings.yml
-- include: swift-restart.yml
+- name: Pull Openstack Ansible Modules
+  hosts: 127.0.0.1
+  sudo: True
+  roles:
+  - role: pull_keystone_service_module
