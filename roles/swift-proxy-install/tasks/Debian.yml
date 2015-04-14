@@ -55,7 +55,7 @@
     dest: /etc/swift/{{ item }}
     owner: "swift"
     group: "swift"
-    mode: 0600
+    mode: 0644
   with_items: config_files
 
 - name: enable services
