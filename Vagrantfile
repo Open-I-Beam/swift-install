@@ -46,31 +46,34 @@ end
 $machine_num = ip_suffix - 2
 $current_machine = 1
 
-def get_machine_box(machinetype)
-     machine = $config_hash["machines"][machinetype]
-     boxes = $config_hash["boxes"]
-     
-     if machine.has_key?("box")
-        return boxes[machine["box"]] 
-     else
-        return boxes[$config_hash["box"]]
-     end
+# checks if a parameter is set for the machinetype
+# if so returns it , otherwise checks if it is set globally
+# if so returns it , otherwise , returns default
+def get_param(machinetype, param, default)
+   machine = $config_hash["machines"][machinetype]
+   if machine.has_key?(param)
+     machine[param]
+   elsif $config_hash.has_key?(param)
+     $config_hash[param]
+   else
+     default 
+   end
+end
 
+def get_machine_box(machinetype)
+  boxes = $config_hash["boxes"]
+  boxes[get_param(machinetype,"box","")]
 end
 
 def setup_storage_devices(server, machinetype, pid)
-  machine = $config_hash["machines"][machinetype]
-  disksize = 4
-  if machine.has_key?("disk_size")
-     disksize = machine["disk_size"]
-  end
+  disksize = get_param(machinetype , "disk_size", 4)
+  disk_num = get_param(machinetype , "disk", 0)
 
   box = get_machine_box(machinetype)
   disk_controller = box["disk_controller"] 
-
+  
   server.vm.provider "virtualbox" do | v |
-    
-    (1..machine["disk"]).each do |did|
+    (1..disk_num).each do |did|
       file_to_disk = "./disk_#{machinetype}_#{pid}_storage_#{did}.vdi"
       unless File.exist?(file_to_disk)
         v.customize ['createhd', '--filename', file_to_disk, '--size', disksize * 1024]
@@ -100,21 +103,10 @@ end
 
 # setup cpu and memory
 def setup_basic_parameters(server , machinetype , pid)
-  machine = $config_hash["machines"][machinetype]
-  
   # setup cpu and memory for the machine
   server.vm.provider "virtualbox" do |v|
-    if machine.has_key?("cpus")
-       v.cpus = machine["cpus"]
-    else   
-       v.cpus = $config_hash["cpus"]
-    end
-
-    if machine.has_key?("memory")
-       v.memory = machine["memory"]
-    else   
-       v.memory = $config_hash["memory"]
-    end   
+    v.cpus = get_param(machinetype , "cpus", 1)
+    v.memory = get_param(machinetype , "memory", 1024)
   end
 end
 
@@ -125,7 +117,6 @@ def setup_box(server,machinetype,pid)
      server.vm.box_url = box["box_url"]
   end
 end
-
 
 def setup_machine(server,machinetype,pid)
   machine = $config_hash["machines"][machinetype]
@@ -138,7 +129,7 @@ def setup_machine(server,machinetype,pid)
   # setup vagrant box and its url
   setup_box(server,machinetype,pid)
 
-  if machine.has_key?("disk")
+  unless get_param(machinetype , "disk", 0) == 0
     setup_storage_devices(server, machinetype, pid)
   end
   
