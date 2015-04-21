@@ -83,6 +83,12 @@ def setup_storage_devices(server, machinetype, pid)
   end
 end
 
+def shell_provision(server,machinetype)
+  commands = get_param(machinetype, "shell", Array.new)
+  commands.each do |c|
+    server.vm.provision "shell", inline: c
+  end
+end
 
 def ansible_provision(server)
   server.vm.provision :ansible do |ansible|
@@ -141,7 +147,10 @@ def setup_machine(server,machinetype,pid)
   # use default key , one for all , you dont really need
   # security for testing purposes , don't you ?
   server.ssh.insert_key = false
-
+ 
+  # provision shell
+  shell_provision(server, machinetype)
+  
   # run ansible provision only after the last machine is
   # set up , to set up to provision the whole cluster at once
   if $current_machine == $machine_num
