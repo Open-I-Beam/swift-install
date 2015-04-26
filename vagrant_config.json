@@ -3,7 +3,9 @@
 "vagrant" : {
   "machines" : {
     "proxy" : {
-      "num":2 
+      "num":0,
+      "box":"ubuntu1404",
+      "shell": ["apt-get -y install cowsay"]
     },
     "storage" : {
       "num":2,
@@ -31,10 +33,16 @@
     }
   
   },
+  "ansible_cloud": {
+    "playbook": "main-vagrant.yml",
+    "inventory_path": "inventory/vagrant/swift_dynamic_inventory.py"
+  },
   "box":"centos7",
   "cpus":2,
   "memory":2048,
-  "ip_prefix":"192.168.50"
+  "ip_prefix":"192.169.70",
+  "shell":["echo \"$(id)\"",
+           "echo \"$(hostname)\""]
 },
 
 "openstack_version":"juno",

@@ -17,7 +17,7 @@
 # vi: set ft=ruby :
 
 require 'json'
-file = File.read('inventory/vagrant/swift_config.json')
+file = File.read('vagrant_config.json')
 $config_hash = JSON.parse(file)
 $config_hash = $config_hash["vagrant"]
 # a list of machine_type's
@@ -90,13 +90,18 @@ def shell_provision(server,machinetype)
   end
 end
 
-def ansible_provision(server)
-  server.vm.provision :ansible do |ansible|
-    ansible.playbook = "main-vagrant.yml"
-    ansible.inventory_path = "inventory/vagrant/swift_dynamic_inventory.py"
-    ansible.sudo = true
-    #ansible.verbose = 'vvvv' 
-    ansible.limit = 'all'
+def ansible_cloud_provision(server)
+  if $config_hash.has_key?("ansible_cloud")
+    ansible_cloud = $config_hash["ansible_cloud"]
+    if ansible_cloud.has_key?("playbook") && ansible_cloud.has_key?("inventory_path")
+      server.vm.provision :ansible do |ansible|
+        ansible.playbook = ansible_cloud["playbook"] 
+        ansible.inventory_path = ansible_cloud["inventory_path"]
+        ansible.sudo = true
+        #ansible.verbose = 'vvvv' 
+        ansible.limit = 'all'
+      end
+    end
   end
 end
 
@@ -154,7 +159,7 @@ def setup_machine(server,machinetype,pid)
   # run ansible provision only after the last machine is
   # set up , to set up to provision the whole cluster at once
   if $current_machine == $machine_num
-     ansible_provision(server)
+     ansible_cloud_provision(server)
   end   
   $current_machine += 1
 end

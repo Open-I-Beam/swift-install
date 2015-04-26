@@ -225,7 +225,7 @@ def main():
     parser.add_argument('--host')
     parser.add_argument('--ips', action='store_true')
     args = parser.parse_args()
-    inventory = Inventory('inventory/vagrant/swift_config.json')
+    inventory = Inventory('vagrant_config.json')
     out = {}
     if args.list:
         out = inventory.show_list()
