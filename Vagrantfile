@@ -23,7 +23,7 @@ class ConfigFile
   private
   
     def init_iplist
-      machine_list = @machines.keys
+      machine_list = @config_hash["machines"].keys
          
       ip_suffix = 2
       @iptables = Hash.new
@@ -47,12 +47,12 @@ class ConfigFile
     
   
   public
+    attr_reader :machine_num
 
     def initialize(filename)
       content = File.read(filename)    
       @config_hash = JSON.parse(content)
       @config_hash = @config_hash["vagrant"]
-      @machines = @config_hash["machines"]
       init_iplist    
     end
     
@@ -70,24 +70,17 @@ class ConfigFile
 
       "#{ip_prefix}.#{ip_suffix}"
     end
-
-    def machine_num
-      @machine_num
-    end
 end
 
 $conf = ConfigFile.new("vagrant_config.json")
 $conf.freeze
 
 class MachineConfig    
-  
+  attr_reader :type
+ 
   def initialize(machinetype)
     @type = machinetype 
     @machine = $conf["machines"][@type]
-  end
-
-  def type
-    @type
   end
 
   def get_ip(pid)
