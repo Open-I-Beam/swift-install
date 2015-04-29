@@ -21,7 +21,7 @@
   sudo: True
   roles:
    - role: swift-storage-add-devices-to-rings
-     ring_builder_host: 'swift-ring-builder'
+     ring_builder_host: "{{ groups['swift-ring-builder'][0] }}"
 
 - name: create rings
   hosts: swift-ring-builder

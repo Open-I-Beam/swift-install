@@ -135,9 +135,6 @@ class Inventory:
                 out.update(proxy_vars(ip, ipind)) 
             return (out, ip)
 
-        def ring_builder():
-            return ({}, self.ips['proxy_ips'][0])
-
         out = {}
         ip = ''
         try:
@@ -147,8 +144,6 @@ class Inventory:
                 out, ip = proxy()
             if name.startswith('storage'):
                 out, ip = storage()
-            if name.startswith('swift-ring-builder'):
-                out, ip = ring_builder()
             
             if len(ip) > 0:
                 out['ansible_ssh_host'] = ip
@@ -192,7 +187,9 @@ class Inventory:
             return dict(hosts=['proxy0'])
 
         def ring_builder():
-            return dict(hosts=['swift-ring-builder'])
+            if self.proxy_storage_unified:
+                return dict(hosts=['storage0'])
+            return dict(hosts=['proxy0'])
 
         if name == 'swift-proxy':
             return proxy()
