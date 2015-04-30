@@ -14,6 +14,21 @@
 #---------------------------------------------------------------------------
 # Written By George Goldberg (georgeg@il.ibm.com)
 ---
+- name: create ring builder objects
+  swift_ring_builder:
+    op: create
+    type: "{{ item }}"
+    part_power: "{{ ring_builder[item].part_power }}"  
+    replicas: "{{ ring_builder[item].replicas}}"  
+    min_part_hours: "{{ ring_builder[item].min_part_hours}}"  
+  run_once: yes
+  delegate_to: "{{ ring_builder_host }}"
+  sudo_user: swift
+  with_items:
+    - object
+    - container
+    - account
+
 - name: add object devices to rings
   swift_ring_builder:
     op: add

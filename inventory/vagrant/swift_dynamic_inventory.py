@@ -166,10 +166,22 @@ class Inventory:
             out = self.__host_group__('storage')
             device_list = list_n_disks(
                 self.conf['vagrant']['machines']['storage']['disk'], self.conf['fstype'])
-            out['vars']['swift_devices'] = dict(
+            ring_builder_data = dict(
+               part_power = '18',
+               replicas = '3',
+               min_part_hours = '1'
+            )
+            out['vars'] = dict( 
+              ring_builder = dict(
+                object = ring_builder_data,
+                container = ring_builder_data,
+                account = ring_builder_data
+              ),
+              swift_devices = dict(
                 object_devices=device_list,
                 container_devices=device_list,
-                account_devices=device_list
+                account_devices=device_list                 
+              )
             )
             return out
 

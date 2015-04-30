@@ -109,6 +109,7 @@ class RingBuilder:
         rc,out,err = module.run_command(cmd , cwd=chdir, check_rc=True)
         
     def create(self):
+        module = self.module
         if not self.builder_file_exists():
            self.__create__()  
            module.exit_json(changed=True)
