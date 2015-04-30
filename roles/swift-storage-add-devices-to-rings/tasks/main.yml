@@ -35,7 +35,7 @@
     type: object
     dev: "{{ item.name  }}"
     ip: "{{ rings_info.ip  }}"
-    port: 6000
+    port: "{{ object_server_port }}"
     region: "{{ rings_info.region }}"
     zone: "{{ rings_info.zone }}"
     weight: "{{ item.weight }}"
@@ -49,7 +49,7 @@
     type: container
     dev: "{{ item.name  }}"
     ip: "{{ rings_info.ip  }}"
-    port: 6001
+    port: "{{ container_server_port  }}"
     region: "{{ rings_info.region }}"
     zone: "{{ rings_info.zone }}"
     weight: "{{ item.weight }}"
@@ -63,7 +63,7 @@
     type: account
     dev: "{{ item.name  }}"
     ip: "{{ rings_info.ip  }}"
-    port: 6002
+    port: "{{ account_server_port  }}"
     region: "{{ rings_info.region }}"
     zone: "{{ rings_info.zone }}"
     weight: "{{ item.weight }}"

@@ -160,7 +160,11 @@ class Inventory:
     def __add_host_group__(self, name):
 
         def proxy():
-            return self.__host_group__('proxy')
+            out = self.__host_group__('proxy')
+            out['vars'] = dict(
+                proxy_server_port=80
+            )    
+            return out
 
         def storage():
             def list_n_disks(n, fs):
@@ -186,7 +190,10 @@ class Inventory:
                     object_devices=device_list,
                     container_devices=device_list,
                     account_devices=device_list
-                )
+                ),
+                account_server_port=6002,
+                container_server_port=6001,
+                object_server_port=6000
             )
             return out
 
