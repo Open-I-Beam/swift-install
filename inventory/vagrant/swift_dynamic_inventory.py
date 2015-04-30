@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#---------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 # Copyright IBM Corp. 2015, 2015 All Rights Reserved
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,7 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # Limitations under the License.
-#---------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 # Written By George Goldberg (georgeg@il.ibm.com)
 
 import argparse
@@ -20,6 +20,7 @@ import json
 
 
 class Inventory:
+
     '''
     Ansible inventory , generated from config file
     '''
@@ -72,8 +73,11 @@ class Inventory:
         if group == 'proxy' and self.proxy_storage_unified:
             group = 'storage'
         g = {}
-        g['hosts'] = ['%s%d' % (group, x)
-                      for x in range(self.conf['vagrant']['machines'][group]['num'])]
+        g['hosts'] = [
+            '%s%d' %
+            (group,
+             x) for x in range(
+                self.conf['vagrant']['machines'][group]['num'])]
         g['vars'] = {}
         return g
 
@@ -104,9 +108,9 @@ class Inventory:
     def show_host(self, name):
         def proxy_vars(ip, ind):
             return dict(
-                  internal_ip=ip,
-                  public_ip=ip,
-                  admin_ip=ip
+                internal_ip=ip,
+                public_ip=ip,
+                admin_ip=ip
             )
 
         def client():
@@ -120,7 +124,7 @@ class Inventory:
         def proxy():
             ipind = int(name[5:])
             ip = self.ips['proxy_ips'][ipind]
-            out = proxy_vars(ip , ipind)
+            out = proxy_vars(ip, ipind)
             return (out, ip)
 
         def storage():
@@ -132,7 +136,7 @@ class Inventory:
                 region=1)
             )
             if self.proxy_storage_unified:
-                out.update(proxy_vars(ip, ipind)) 
+                out.update(proxy_vars(ip, ipind))
             return (out, ip)
 
         out = {}
@@ -144,13 +148,13 @@ class Inventory:
                 out, ip = proxy()
             if name.startswith('storage'):
                 out, ip = storage()
-            
+
             if len(ip) > 0:
                 out['ansible_ssh_host'] = ip
                 out.update(self.conf['credentials'])
         except:
-            pass 
-        
+            pass
+
         return out
 
     def __add_host_group__(self, name):
@@ -165,23 +169,24 @@ class Inventory:
 
             out = self.__host_group__('storage')
             device_list = list_n_disks(
-                self.conf['vagrant']['machines']['storage']['disk'], self.conf['fstype'])
+                self.conf['vagrant']['machines']['storage']['disk'],
+                self.conf['fstype'])
             ring_builder_data = dict(
-               part_power = '18',
-               replicas = '3',
-               min_part_hours = '1'
+                part_power='18',
+                replicas='3',
+                min_part_hours='1'
             )
-            out['vars'] = dict( 
-              ring_builder = dict(
-                object = ring_builder_data,
-                container = ring_builder_data,
-                account = ring_builder_data
-              ),
-              swift_devices = dict(
-                object_devices=device_list,
-                container_devices=device_list,
-                account_devices=device_list                 
-              )
+            out['vars'] = dict(
+                ring_builder=dict(
+                    object=ring_builder_data,
+                    container=ring_builder_data,
+                    account=ring_builder_data
+                ),
+                swift_devices=dict(
+                    object_devices=device_list,
+                    container_devices=device_list,
+                    account_devices=device_list
+                )
             )
             return out
 
