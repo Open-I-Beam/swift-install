@@ -163,7 +163,7 @@ class Inventory:
             out = self.__host_group__('proxy')
             out['vars'] = dict(
                 proxy_server_port=80
-            )    
+            )
             return out
 
         def storage():
