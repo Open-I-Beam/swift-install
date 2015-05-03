@@ -16,7 +16,6 @@
 ---
 - name: stop proxy services
   hosts: swift-proxy
-  serial: 1
   gather_facts: True
   sudo: True
   roles:
@@ -24,7 +23,6 @@
 
 - name: stop storage services
   hosts: swift-storage
-  serial: 1
   gather_facts: True
   sudo: True
   roles:
