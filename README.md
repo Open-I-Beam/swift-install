@@ -48,7 +48,7 @@ Supported OS'es ,.Ubuntu >= 14.04 , Centos/RHEL >= 7
          * account
      * keystone(optionally) , note that if you don't want ot install a keystone service , just remove the line ```- include: keystone.yml``` in main-install.yml
 
-3. A one host may serve for more than for one service , moreover all services can be installed on one , **allinone** host (see Host Groups)
+3. A one host may serve for more than one service , moreover all services can be installed on one , **allinone** host (see Host Groups)
 
 
 ## Host Groups 
