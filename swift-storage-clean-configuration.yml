@@ -23,7 +23,7 @@
    - role: swift-proxy-stop
 
 - name: stop storage services
-  hosts: swift-proxy
+  hosts: swift-storage
   serial: 1
   gather_facts: True
   sudo: True
