@@ -16,8 +16,13 @@ Supported OS'es ,.Ubuntu >= 14.04 , Centos/RHEL >= 7
 
 3. an example for running ansible [ad-hoc](http://docs.ansible.com/intro_adhoc.html) with the inventory
     * ```ansible -i inventory/swift_install_hosts swift-storage -m shell -a 'swift-init all status'```
-       * check status of all swift services , for all hosts in swift-storage group (if it is a defined group in an inventory inventory/swift_install_hosts)
+       * check status of all swift services , for all hosts in swift-storage host group (if it is a defined host group in an inventory, inventory/swift_install_hosts)
     * ```ansible -i inventory/swift_install_hosts proxy1 -m shell -a 'swift-init all status'```
+       * check status of all swift services , for proxy1 host (if it is a defined host in an inventory, inventory/swift_install_hosts)
+
+4. an example of running ansible [playbook](http://docs.ansible.com/playbooks.html)
+    * ```ansible-playbook -i inventory/swift_install_hosts main-install.yml```
+        * deploy swift using inventory, inventory/swift_install_hosts
 
 ## Hosts
 1. For each host define its name and a way to access (in an iventory file) , for example:
