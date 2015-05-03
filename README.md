@@ -3,10 +3,21 @@ Ansible scripts to install Swift , on real or virtual vagrant environments. For 
 
 Supported OS'es ,.Ubuntu >= 14.04 , Centos/RHEL >= 7
 
-# Inventory
+# [Inventory](http://docs.ansible.com/intro_inventory.html)
+
 
 ## General Info
-1. Inventory , with the hosts , and hostgroups definitions ared defined in one file , and then can be used in ansible ad-hoc commands , and ansible-playbook commands , using **-i** switch, 
+1. Inventory , with the hosts , and hostgroups definitions is defined in one file , and then can be used in ansible ad-hoc commands , and ansible-playbook commands , using **-i** switch, 
+    * For example [inventory/swift_install_hosts](https://github.com/Open-I-Beam/swift-install/blob/master/inventory/swift_install_hosts)
+
+2. Plus 2 directories (and yml formatted files within them) , that reside in a **same directory** as the inventory file (above) , note the files within should have **no!!!!** extension
+    * host_vars
+    * group_vars
+
+3. an example for running ansible [ad-hoc](http://docs.ansible.com/intro_adhoc.html) with the inventory
+    * ```ansible -i inventory/swift_install_hosts swift-storage -m shell -a 'swift-init all status'```
+       * check status of all swift services , for all hosts in swift-storage group (if it is a defined group in an inventory inventory/swift_install_hosts)
+    * ```ansible -i inventory/swift_install_hosts proxy1 -m shell -a 'swift-init all status'```
 
 ## Hosts
 1. For each host define its name and a way to access (in an iventory file) , for example:
