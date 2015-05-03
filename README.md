@@ -11,3 +11,11 @@ Supported OS'es ,.Ubuntu >= 14.04 , Centos/RHEL >= 7
 
   or if it is accessed by ssh_key:
      * ```proxy1 ansible_ssh_host=10.0.0.121 ansible_ssh_user=root ansible_ssh_private_key_file=~/.vagrant.d/insecure_private_key```
+     
+2. You will need hosts , for the following services:
+     * swift-proxy service
+     * swift-storage services (currently have the same installation policy for all of the three)
+         * object  
+         * container
+         * account
+     * keystone(optionally) , note that if you don't want ot install a keystone service , just remove the line ```- include: keystone.yml``` in main-install.yml
