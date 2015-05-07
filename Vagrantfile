@@ -18,210 +18,210 @@
 
 require 'json'
 
-
+# ConfigFile , parses the json config file vagrant_config.json
 class ConfigFile
   private
-  
+
     def init_iplist
-      machine_list = @config_hash["machines"].keys
-         
-      ip_suffix = 2
-      @iptables = Hash.new
-      machines = @config_hash["machines"]
-          
-      # be lazy , calculate an ip for each machine 
+      # be lazy , calculate an ip for each machine
       # beforehand , the final ip will be
       # #{ip_prefix}.#{iptables[machine_type][machine_id]}
-      machine_list.each do |m|
-        num = machines[m]["num"]
-        if num > 0
-          @iptables[m] = Hash.new
-          (0..(num - 1)).each do |pid|
-             @iptables[m][pid] = ip_suffix
-             ip_suffix += 1
-          end
+      @config_hash['machines'].keys.each do |m|
+        num = @config_hash['machines'][m]['num']
+        num > 0 || next
+        @iptables[m] = {}
+        (0..(num - 1)).each do |pid|
+          @iptables[m][pid] = @machine_num + 2
+          @machine_num += 1
         end
       end
-      @machine_num = ip_suffix - 2
     end
-    
-  
+
   public
+
     attr_reader :machine_num
 
-    def initialize(filename)
-      content = File.read(filename)    
-      @config_hash = JSON.parse(content)
-      @config_hash = @config_hash["vagrant"]
-      init_iplist    
+    def self.conf
+      @conf ||= ConfigFile.new('vagrant_config.json')
     end
-    
+
+    def initialize(filename)
+      content = File.read(filename)
+      @config_hash = JSON.parse(content)
+      @config_hash = @config_hash['vagrant']
+      @iptables = {}
+      @machine_num = 0
+      init_iplist
+    end
+
     def [](x)
       @config_hash[x]
     end
-    
-    def has_key?(key)
-      @config_hash.has_key?(key)
+
+    def key?(key)
+      @config_hash.key?(key)
     end
 
-    def get_ip(hostname,pid)
-      ip_prefix = @config_hash["ip_prefix"]
-      ip_suffix = @iptables[hostname][pid]
-
-      "#{ip_prefix}.#{ip_suffix}"
+    def ip(hostname, pid)
+      "#{@config_hash['ip_prefix']}.#{@iptables[hostname][pid]}"
     end
 end
 
-$conf = ConfigFile.new("vagrant_config.json")
-$conf.freeze
+# MachineConfig, a per machine type config global data
+class MachineConfig
+  private
 
-class MachineConfig    
-  attr_reader :type
- 
-  def initialize(machinetype)
-    @type = machinetype 
-    @machine = $conf["machines"][@type]
-  end
+    def conf
+      ConfigFile.conf
+    end
 
-  def get_ip(pid)
-    $conf.get_ip(@type,pid)
-  end
-  
-  # checks if a parameter is set for the machinetype
-  # if so returns it , otherwise checks if it is set globally
-  # if so returns it , otherwise , returns default
-  def get(param, default)
-     if @machine.has_key?(param)
-       @machine[param]
-     elsif $conf.has_key?(param)
-       $conf[param]
-     else
-       default 
-     end
-  end
+  public
 
-  def box
-    boxes = $conf["boxes"]
-    boxes[get("box","")]
-  end
+    attr_reader :type
 
+    def initialize(machinetype)
+      @type = machinetype
+      @machine = conf['machines'][@type]
+    end
+
+    def ip(pid)
+      conf.ip(@type, pid)
+    end
+
+    # checks if a parameter is set for the machinetype
+    # if so returns it , otherwise checks if it is set globally
+    # if so returns it , otherwise , returns default
+    def get(param, default)
+      if @machine.key?(param)
+        @machine[param]
+      elsif conf.key?(param)
+        conf[param]
+      else
+        default
+      end
+    end
+
+    def box
+      boxes = conf['boxes']
+      boxes[get('box', '')]
+    end
 end
 
+# An instance of a configured single machine
 class Machine
   private
-    @@counter = 1
-    
-    def self.get_machine_number
+
+    def conf
+      ConfigFile.conf
+    end
+
+    # works since vagrant is single threaded
+    def self.machine_number
+      @@counter ||= 1
       c = @@counter
       @@counter += 1
       c
     end
-  
-    def setup_storage_devices
 
-      disksize = @conf.get("disk_size", 4)
-      disk_num = @conf.get("disk", 0)
-
-      disk_controller = @conf.box["disk_controller"] 
-      
-      @server.vm.provider "virtualbox" do | v |
-        (1..disk_num).each do |did|
-          file_to_disk = "./disk_#{@conf.type}_#{@pid}_storage_#{did}.vdi"
-          unless File.exist?(file_to_disk)
-            v.customize ['createhd', 
-                         '--filename', file_to_disk, 
-                         '--size', disksize * 1024]
-          end
-          v.customize ['storageattach', :id, 
-                       '--storagectl', disk_controller, 
-                       '--port', did, 
-                       '--device', 0, 
-                       '--type', 'hdd', 
-                       '--medium', file_to_disk]
+    def setup_storage_device(device_file, size, controller, port)
+      @server.vm.provider 'virtualbox' do |v|
+        unless File.exist?(device_file)
+          v.customize ['createhd', '--filename', device_file,
+                       '--size', size * 1024]
         end
+        v.customize ['storageattach', :id,
+                     '--storagectl', controller,
+                     '--port', port, '--device', 0,
+                     '--type', 'hdd', '--medium', device_file]
+      end
+    end
+
+    def setup_storage_devices
+      size = @conf.get('disk_size', 4)
+      disk_num = @conf.get('disk', 0)
+
+      controller = @conf.box['disk_controller']
+
+      (1..disk_num).each do |did|
+        device_file = "./disk_#{@conf.type}_#{@pid}_storage_#{did}.vdi"
+        setup_storage_device(device_file, size, controller, did)
       end
     end
 
     def shell_provision
-      commands = @conf.get("shell", Array.new)
+      commands = @conf.get('shell', [])
       commands.each do |c|
-        @server.vm.provision "shell", inline: c
+        @server.vm.provision 'shell', inline: c
       end
     end
 
     def ansible_cloud_provision
-      if $conf.has_key?("ansible_cloud")
-        ansible_cloud = $conf["ansible_cloud"]
-        if ansible_cloud.has_key?("playbook") &&
-           ansible_cloud.has_key?("inventory_path")
-          
-          @server.vm.provision :ansible do |ansible|
-            ansible.playbook = ansible_cloud["playbook"] 
-            ansible.inventory_path = ansible_cloud["inventory_path"]
-            ansible.sudo = true
-            #ansible.verbose = 'vvvv' 
-            ansible.limit = 'all'
-          end
-        end
+      return unless conf.key?('ansible_cloud')
+      ac = conf['ansible_cloud']
+      return unless ac.key?('playbook') && ac.key?('playbook')
+      @server.vm.provision :ansible do |ansible|
+        ansible.playbook = ac['playbook']
+        ansible.inventory_path = ac['inventory_path']
+        ansible.sudo = true
+        # ansible.verbose = 'vvvv'
+        ansible.limit = 'all'
       end
     end
 
     # setup cpu and memory
     def setup_basic_parameters
       # setup cpu and memory for the machine
-      @server.vm.provider "virtualbox" do |v|
-        v.cpus = @conf.get("cpus", 1)
-        v.memory = @conf.get("memory", 1024)
+      @server.vm.provider 'virtualbox' do |v|
+        v.cpus = @conf.get('cpus', 1)
+        v.memory = @conf.get('memory', 1024)
       end
     end
 
     def setup_box
       box = @conf.box
-      @server.vm.box = box["box"]
-      if box.has_key?("box_url")
-         @server.vm.box_url = box["box_url"]
-      end
+      @server.vm.box = box['box']
+      @server.vm.box_url = box['box_url'] if box.key?('box_url')
+    end
+
+    def setup_network
+      ip_address = @conf.ip(@pid)
+      @server.vm.network 'private_network', ip: ip_address
+      @server.vm.hostname = "#{@conf.type}#{@pid}"
     end
 
   public
-    def initialize(vagrantserver,machineconf,id)
-      @conf = machineconf 
+
+    def initialize(vagrantserver, machineconf, id)
+      @conf = machineconf
       @pid = id
       @server = vagrantserver
-      @number = Machine.get_machine_number
+      @number = Machine.machine_number
     end
-    
+
     def setup
       # each setup parameter can be local to a machine_type
       # or global
-      
+
       # setup cpu and memory
       setup_basic_parameters
-      
+
       # setup vagrant box and its url
       setup_box
 
-      unless @conf.get("disk", 0) == 0
-        setup_storage_devices
-      end
-      
-      # setup ip address
-      ip_address = @conf.get_ip(@pid)
-      @server.vm.network "private_network",ip: ip_address
-      @server.vm.hostname = "#{@conf.type}#{@pid}"
-      
+      setup_storage_devices unless @conf.get('disk', 0) == 0
+
+      setup_network
+
       # use default key , one for all , you dont really need
       # security for testing purposes , don't you ?
       @server.ssh.insert_key = false
-     
+
       # provision shell
       shell_provision
-      
+
       # run ansible provision only after the last machine is
       # set up , to set up to provision the whole cluster at once
-      if @number == $conf.machine_num
-         ansible_cloud_provision
-      end   
+      ansible_cloud_provision if @number == conf.machine_num
     end
 end
 
@@ -229,19 +229,18 @@ Vagrant.configure(2) do |config|
   # setup dns virtual box to intercept dns requests
   # and convey it to host dns
   config.vm.provider :virtualbox do |vb|
-    vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
-    vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
+    vb.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
+    vb.customize ['modifyvm', :id, '--natdnsproxy1', 'on']
   end
- 
-  $conf["machines"].keys.each do |m|  
+
+  ConfigFile.conf['machines'].keys.each do |m|
     machine_conf = MachineConfig.new(m)
-    num = machine_conf.get("num", 0)
+    num = machine_conf.get('num', 0)
     (0..(num - 1)).each do |pid|
       config.vm.define "#{m}#{pid}" do |server|
-        machine = Machine.new(server,machine_conf, pid)
+        machine = Machine.new(server, machine_conf, pid)
         machine.setup
       end
     end
   end
-
 end
