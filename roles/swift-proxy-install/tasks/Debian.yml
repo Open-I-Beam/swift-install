@@ -21,8 +21,8 @@
     force: yes
     update_cache: yes 
     cache_valid_time: 600
-  with_items: debian_packages
-
+  with_items: debian_packages.common + debian_packages[openstack_version] 
+  
 - name: ensure services are stopped
   service: 
     name: "{{ item }}"

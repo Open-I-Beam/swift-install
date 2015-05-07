@@ -15,18 +15,26 @@
 # Written By George Goldberg (georgeg@il.ibm.com)
 ---
 debian_packages:
-  - memcached
-  - python-keystoneclient
-  - python-memcache
-  - python-swiftclient
-  - python-webob
-  - swift
-  - swift-proxy
+  common:
+    - memcached
+    - python-memcache
+    - python-swiftclient
+    - python-webob
+    - swift
+    - swift-proxy
+  havanna:
+    - python-keystoneclient
+  juno:
+    - python-keystonemiddleware
 
 redhat_packages:
-  - openstack-swift-proxy
-  - memcached
-  - python-swiftclient
+  common:
+    - openstack-swift-proxy
+    - memcached
+  havanna:
+    - python-swiftclient
+  juno:
+    - python-keystonemiddleware
 
 debian_services:
   - memcached

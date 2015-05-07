@@ -18,7 +18,7 @@
   yum: 
     pkg: "{{ item }}"
     state: latest 
-  with_items: redhat_packages
+  with_items: redhat_packages.common + redhat_packages[openstack_version]
 
 - name: ensure services are stopped
   service: 
