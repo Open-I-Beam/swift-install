@@ -158,7 +158,7 @@ class Machine
     def ansible_cloud_provision
       return unless conf.key?('ansible_cloud')
       ac = conf['ansible_cloud']
-      return unless ac.key?('playbook') && ac.key?('playbook')
+      return unless ac.key?('playbook') && ac.key?('inventory_path')
       @server.vm.provision :ansible do |ansible|
         ansible.playbook = ac['playbook']
         ansible.inventory_path = ac['inventory_path']
