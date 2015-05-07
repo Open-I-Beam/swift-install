@@ -92,13 +92,9 @@ class MachineConfig
     # if so returns it , otherwise checks if it is set globally
     # if so returns it , otherwise , returns default
     def get(param, default)
-      if @machine.key?(param)
-        @machine[param]
-      elsif conf.key?(param)
-        conf[param]
-      else
-        default
-      end
+      return @machine[param] if @machine.key?(param)
+      return conf[param] if conf.key?(param)
+      default
     end
 
     def box
