@@ -31,8 +31,9 @@ redhat_packages:
   common:
     - openstack-swift-proxy
     - memcached
-  havanna:
     - python-swiftclient
+  havanna:
+    - python-keystoneclient
   juno:
     - python-keystonemiddleware
 
