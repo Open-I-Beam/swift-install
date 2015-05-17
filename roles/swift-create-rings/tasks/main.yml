@@ -14,6 +14,32 @@
 #---------------------------------------------------------------------------
 # Written By George Goldberg (georgeg@il.ibm.com)
 ---
+- name: create ring builder objects
+  swift_ring_builder:
+    op: create
+    type: "{{ item }}"
+    part_power: "{{ ring_builder[item].part_power }}"  
+    replicas: "{{ ring_builder[item].replicas}}"  
+    min_part_hours: "{{ ring_builder[item].min_part_hours}}"  
+  sudo_user: swift
+  with_items:
+    - object
+    - container
+    - account
+
+- name: add devices to rings
+  swift_ring_builder:
+    op: add
+    type: "{{ item.type }}"
+    dev: "{{ item.device.name  }}"
+    ip: "{{ item.ring.ip  }}"
+    port: "{{ item.ring.port }}"
+    region: "{{ item.ring.region }}"
+    zone: "{{ item.ring.zone }}"
+    weight: "{{ item.device.weight }}"
+  with_items: devices
+  sudo_user: swift 
+
 - name: rebalance rings
   swift_ring_builder:
     op: rebalance
@@ -30,3 +56,4 @@
    - account
    - container
    - object
+  

@@ -14,21 +14,17 @@
 #---------------------------------------------------------------------------
 # Written By George Goldberg (georgeg@il.ibm.com)
 ---
-- name: add storage devices to ring builders
-  hosts: swift-storage
-  serial: 1
-  gather_facts: False
-  sudo: True
-  roles:
-   - role: swift-storage-add-devices-to-rings
-     ring_builder_host: "{{ groups['swift-ring-builder'][0] }}"
-
 - name: create rings
   hosts: swift-ring-builder
   sudo: True
   gather_facts: True
+  vars:
+    object_devices: "{{ hostvars|extractfromdict(groups['swift-storage'])|map('propagatevalue','swift_devices.object_devices','rings_info', dname='device', vname='ring') | listflatten | addfield('type','object') | addfield('ring.port', object_server_port) }}"
+    container_devices: "{{ hostvars|extractfromdict(groups['swift-storage'])|map('propagatevalue','swift_devices.container_devices','rings_info', dname='device', vname='ring') | listflatten | addfield('type','container') | addfield('ring.port', container_server_port) }}"
+    all_devices: "{{ hostvars|extractfromdict(groups['swift-storage'])|map('propagatevalue','swift_devices.account_devices','rings_info', dname='device', vname='ring') | listflatten | addfield('type','account') | addfield('ring.port', account_server_port) + container_devices + object_devices }}"
   roles:
-   - role: swift-create-rings
+  - role: swift-create-rings 
+    devices: "{{ all_devices }}"
    
 - name: distribute rings
   hosts: swift-proxy:swift-storage
