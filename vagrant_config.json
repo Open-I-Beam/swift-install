@@ -34,8 +34,8 @@
   
   },
   "ansible_cloud": {
-    "playbook": "main-vagrant.yml",
-    "inventory_path": "inventory/vagrant/swift_dynamic_inventory.py"
+    "playbook": "provisioning/main-vagrant.yml",
+    "inventory_path": "provisioning/inventory/vagrant/swift_dynamic_inventory.py"
   },
   "box":"centos7",
   "cpus":2,
