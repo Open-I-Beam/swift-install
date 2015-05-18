@@ -175,25 +175,15 @@ class Inventory:
             device_list = list_n_disks(
                 self.conf['vagrant']['machines']['storage']['disk'],
                 self.conf['fstype'])
-            ring_builder_data = dict(
-                part_power='18',
-                replicas='3',
-                min_part_hours='1'
-            )
             out['vars'] = dict(
-                ring_builder=dict(
-                    object=ring_builder_data,
-                    container=ring_builder_data,
-                    account=ring_builder_data
-                ),
+                account_server_port=6002,
+                container_server_port=6001,
+                object_server_port=6000,
                 swift_devices=dict(
                     object_devices=device_list,
                     container_devices=device_list,
                     account_devices=device_list
-                ),
-                account_server_port=6002,
-                container_server_port=6001,
-                object_server_port=6000
+                )    
             )
             return out
 
@@ -212,8 +202,24 @@ class Inventory:
 
         def ring_builder():
             if self.proxy_storage_unified:
-                return dict(hosts=['storage0'])
-            return dict(hosts=['proxy0'])
+                out = dict(hosts=['storage0'])
+            else:
+                out = dict(hosts=['proxy0'])
+                
+            ring_builder_data = dict(
+                part_power='18',
+                replicas='3',
+                min_part_hours='1'
+            )
+            out['vars'] = dict(   
+                ring_builder=dict(
+                    object=ring_builder_data,
+                    container=ring_builder_data,
+                    account=ring_builder_data
+                ),
+            )
+
+            return out
 
         if name == 'swift-proxy':
             return proxy()

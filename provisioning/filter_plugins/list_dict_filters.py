@@ -15,7 +15,7 @@
 # Written By George Goldberg (georgeg@il.ibm.com)
 
 
-def dict_path(d, path):
+def get_dict_path(d, path):
     l = d
     name = path
     for i in path.split('.'):
@@ -25,23 +25,42 @@ def dict_path(d, path):
     return (name, l)
 
 
+def set_dict_path(d, path, v):
+    l = d
+    lst = path.split('.')
+    spath = lst[:-1]
+    entry = lst[-1]
+    for i in spath:
+        if i not in l:
+            l[i] = {}
+        l = l[i]
+
+    l[entry] = v
+
+
 def extractfromdict(d, l):
     r = []
     for f in l:
-        r.append(dict_path(d, f)[1])
-
+        r.append(get_dict_path(d, f)[1])
     return r
 
 
-def propagatevalue(d, listpath, valuepath, dname=None, vname=None):
-    r = []
-    [_vname, v] = dict_path(d, valuepath)
-    [_dname, lst] = dict_path(d, listpath)
-    vname = _vname if vname is None else vname
-    dname = _dname if dname is None else dname
-    for f in lst:
-        r.append({vname: v, dname: f})
+def dictrearrange(d, vals):
+    o = {}
+    for opath, dpath in vals.iteritems():
+        [_, v] = get_dict_path(d, dpath)
+        set_dict_path(o, opath, v)
+    return o
 
+
+def propagatevalue(d, listpath, dname, vals):
+    r = []
+    [_dname, lst] = get_dict_path(d, listpath)
+    v = dictrearrange(d, vals)
+    for f in lst:
+        dd = {dname: f}
+        dd.update(v)
+        r.append(dd)
     return r
 
 

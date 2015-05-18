@@ -19,9 +19,10 @@
   sudo: True
   gather_facts: True
   vars:
-    object_devices: "{{ hostvars|extractfromdict(groups['swift-storage'])|map('propagatevalue','swift_devices.object_devices','rings_info', dname='device', vname='ring') | listflatten | addfield('type','object') | addfield('ring.port', object_server_port) }}"
-    container_devices: "{{ hostvars|extractfromdict(groups['swift-storage'])|map('propagatevalue','swift_devices.container_devices','rings_info', dname='device', vname='ring') | listflatten | addfield('type','container') | addfield('ring.port', container_server_port) }}"
-    all_devices: "{{ hostvars|extractfromdict(groups['swift-storage'])|map('propagatevalue','swift_devices.account_devices','rings_info', dname='device', vname='ring') | listflatten | addfield('type','account') | addfield('ring.port', account_server_port) + container_devices + object_devices }}"
+    object_devices: "{{ hostvars|extractfromdict(groups['swift-storage'])|map('propagatevalue','swift_devices.object_devices','device', {'ring':'rings_info','ring.port':'object_server_port'}) | listflatten | addfield('type','object') }}"
+    container_devices: "{{ hostvars|extractfromdict(groups['swift-storage'])|map('propagatevalue','swift_devices.container_devices','device', {'ring':'rings_info','ring.port':'container_server_port'}) | listflatten | addfield('type','container') }}"
+    all_devices: "{{ hostvars|extractfromdict(groups['swift-storage'])|map('propagatevalue','swift_devices.account_devices','device', {'ring':'rings_info','ring.port':'account_server_port'}) | listflatten | addfield('type','account') + container_devices + object_devices }}"
+  tasks:
   roles:
   - role: swift-create-rings 
     devices: "{{ all_devices }}"
