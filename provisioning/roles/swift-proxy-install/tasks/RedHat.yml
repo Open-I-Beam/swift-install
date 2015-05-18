@@ -18,13 +18,7 @@
   yum: 
     pkg: "{{ item }}"
     state: latest 
-  with_items: redhat_packages.common + redhat_packages[openstack_version]
-
-- name: ensure services are stopped
-  service: 
-    name: "{{ item }}"
-    state: stopped
-  with_items: redhat_services
+  with_items: packages
 
 - name: update memcached configure from template
   template:
@@ -33,32 +27,3 @@
     owner: root
     group: root
     mode: 0644
-
-- name: create directories if not already there
-  file:
-    path: "{{ item }}"
-    owner: "swift"
-    group: "swift"
-    mode: 0750
-    state: directory
-  with_items:
-    - /etc/swift
-    - /var/lib/swift
-    - /var/lib/swift/keystone-signing
-
-- name: update configuration files from templates
-  template: 
-    src: etc/swift/{{ openstack_version }}/{{ item }}
-    dest: /etc/swift/{{ item }}
-    owner: "swift"
-    group: "swift"
-    mode: 0600
-  with_items: config_files
-
-- name: enable services
-  service: 
-    name: "{{ item }}"
-    enabled: yes
-    state: started
-  with_items: redhat_services
-

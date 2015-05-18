@@ -14,35 +14,51 @@
 #---------------------------------------------------------------------------
 # Written By George Goldberg (georgeg@il.ibm.com)
 ---
-debian_packages:
-  common:
+common_os_packages:
+  Debian:
     - memcached
     - python-memcache
     - python-swiftclient
     - python-webob
     - swift
     - swift-proxy
-  havanna:
-    - python-keystoneclient
-  juno:
-    - python-keystonemiddleware
-
-redhat_packages:
-  common:
+  RedHat:
     - openstack-swift-proxy
     - memcached
     - python-swiftclient
-  havanna:
-    - python-keystoneclient
-  juno:
-    - python-keystonemiddleware
 
-debian_services:
-  - memcached
+os_packages:
+  Debian:
+    havanna:
+      - python-keystoneclient
+    juno:
+      - python-keystonemiddleware
+    kilo:
+      - python-keystonemiddleware
+  RedHat:
+    havanna:
+      - python-keystoneclient
+    juno: 
+      - python-keystonemiddleware
+    kilo:
+      - python-keystonemiddleware
 
-redhat_services:
-  - memcached
+packages: "{{ common_os_packages[ansible_os_family] + os_packages[ansible_os_family][openstack_version] }}"
+
+os_services:
+  Debian:
+    - memcached
+  RedHat:
+    - memcached
+
+services: "{{ os_services[ansible_os_family] }}"
 
 config_files:
-  - proxy-server.conf
-  - swift.conf
+  proxy-server.conf:
+    havanna: etc/swift/havanna/proxy-server.conf
+    juno: etc/swift/juno/proxy-server.conf
+    kilo: etc/swift/kilo/proxy-server.conf
+  swift.conf:
+    havanna: etc/swift/havanna/swift.conf
+    juno: etc/swift/juno/swift.conf
+    kilo: etc/swift/kilo/swift.conf

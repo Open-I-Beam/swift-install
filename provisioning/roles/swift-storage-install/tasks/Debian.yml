@@ -21,37 +21,7 @@
     force: yes
     update_cache: yes 
     cache_valid_time: 600
-  with_items: debian_packages
-
-- name: ensure services are stopped
-  service: 
-    name: "{{ item }}"
-    state: stopped
-  ignore_errors: yes  
-  with_items: debian_services
-
-
-- name: create directories if not already there
-  file:
-    path: "{{ item }}"
-    owner: "swift"
-    group: "swift"
-    mode: 0750
-    state: directory
-  with_items:
-    - /etc/swift
-    - /srv/node
-    - /var/lib/swift
-    - /var/cache/swift
-
-- name: update configuration files from templates
-  template: 
-    src: etc/swift/{{ openstack_version }}/{{ item }}
-    dest: /etc/swift/{{ item }}
-    owner: "swift"
-    group: "swift"
-    mode: 0600
-  with_items: config_files
+  with_items: packages
 
 - name: update rsyncd.conf from template
   template: 

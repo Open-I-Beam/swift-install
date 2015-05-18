@@ -20,3 +20,30 @@
 - include: RedHat.yml
   when: ansible_os_family == 'RedHat'
 
+- name: create directories if not already there
+  file:
+    path: "{{ item }}"
+    owner: "swift"
+    group: "swift"
+    mode: 0750
+    state: directory
+  with_items:
+    - /etc/swift
+    - /var/lib/swift
+    - /var/lib/swift/keystone-signing
+
+- name: update configuration swift files from templates
+  template: 
+    src: "{{ item.value[openstack_version]  }}"
+    dest: /etc/swift/{{ item.key }}
+    owner: "swift"
+    group: "swift"
+    mode: 0600
+  with_dict: config_files
+
+- name: enable services 
+  service: 
+    name: "{{ item }}"
+    enabled: yes
+    state: started
+  with_items: services

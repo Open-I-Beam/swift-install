@@ -21,14 +21,8 @@
     force: yes
     update_cache: yes 
     cache_valid_time: 600
-  with_items: debian_packages.common + debian_packages[openstack_version] 
+  with_items: packages 
   
-- name: ensure services are stopped
-  service: 
-    name: "{{ item }}"
-    state: stopped
-  with_items: debian_services
-
 - name: update memcached.conf from template
   template:
     src: Debian/etc/memcached.conf
@@ -36,32 +30,3 @@
     owner: root
     group: root
     mode: 0644
-
-- name: create directories if not already there
-  file:
-    path: "{{ item }}"
-    owner: "swift"
-    group: "swift"
-    mode: 0750
-    state: directory
-  with_items:
-    - /etc/swift
-    - /var/lib/swift
-    - /var/lib/swift/keystone-signing
-
-- name: update configuration files from templates
-  template: 
-    src: etc/swift/{{ openstack_version }}/{{ item }}
-    dest: /etc/swift/{{ item }}
-    owner: "swift"
-    group: "swift"
-    mode: 0644
-  with_items: config_files
-
-- name: enable services
-  service: 
-    name: "{{ item }}"
-    state: started
-    enabled: yes
-  with_items: debian_services
-

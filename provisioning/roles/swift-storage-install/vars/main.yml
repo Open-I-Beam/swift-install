@@ -14,52 +14,78 @@
 #---------------------------------------------------------------------------
 # Written By George Goldberg (georgeg@il.ibm.com)
 ---
-redhat_packages:
-  - openstack-swift-account
-  - openstack-swift-container
-  - openstack-swift-object
-  - xinetd
+common_os_packages:
+  Debian:
+    - python-xattr
+    - rsync
+    - swift
+    - swift-account
+    - swift-container
+    - swift-object
+    - python-keystoneclient
+    - python-swiftclient
+  RedHat:
+    - openstack-swift-account
+    - openstack-swift-container
+    - openstack-swift-object
+    - xinetd
 
-redhat_services:
-  - openstack-swift-object
-  - openstack-swift-object-replicator 
-  - openstack-swift-object-updater 
-  - openstack-swift-object-auditor
-  - openstack-swift-container
-  - openstack-swift-container-replicator 
-  - openstack-swift-container-updater 
-  - openstack-swift-container-auditor
-  - openstack-swift-account
-  - openstack-swift-account-replicator
-  - openstack-swift-account-reaper
-  - openstack-swift-account-auditor
+os_packages:
+  Debian:
+    havanna: []
+    juno: []
+    kilo: []
+  RedHat: 
+    havanna: []
+    juno: []
+    kilo: []
 
-debian_packages:
-  - python-xattr
-  - rsync
-  - swift
-  - swift-account
-  - swift-container
-  - swift-object
-  - python-keystoneclient
-  - python-swiftclient
+packages: "{{ common_os_packages[ansible_os_family] + os_packages[ansible_os_family][openstack_version] }}"
 
-debian_services:
-  - swift-account
-  - swift-account-auditor
-  - swift-account-reaper
-  - swift-account-replicator
-  - swift-container
-  - swift-container-auditor
-  - swift-container-replicator
-  - swift-container-updater
-  - swift-object
-  - swift-object-auditor
-  - swift-object-replicator
-  - swift-object-updater
+os_services:
+  RedHat:
+    - openstack-swift-object
+    - openstack-swift-object-replicator 
+    - openstack-swift-object-updater 
+    - openstack-swift-object-auditor
+    - openstack-swift-container
+    - openstack-swift-container-replicator 
+    - openstack-swift-container-updater 
+    - openstack-swift-container-auditor
+    - openstack-swift-account
+    - openstack-swift-account-replicator
+    - openstack-swift-account-reaper
+    - openstack-swift-account-auditor
+  Debian:
+    - swift-account
+    - swift-account-auditor
+    - swift-account-reaper
+    - swift-account-replicator
+    - swift-container
+    - swift-container-auditor
+    - swift-container-replicator
+    - swift-container-updater
+    - swift-object
+    - swift-object-auditor
+    - swift-object-replicator
+    - swift-object-updater
+
+services: "{{ os_services[ansible_os_family] }}"
 
 config_files:
-  - swift.conf
-  - account-server.conf
-  - container-server.conf
-  - object-server.conf
+  container-server.conf:
+    havanna: etc/swift/havanna/container-server.conf
+    juno: etc/swift/juno/container-server.conf
+    kilo: etc/swift/juno/container-server.conf
+  account-server.conf:
+    havanna: etc/swift/havanna/account-server.conf
+    juno: etc/swift/juno/account-server.conf
+    kilo: etc/swift/juno/account-server.conf
+  object-server.conf:
+    havanna: etc/swift/havanna/object-server.conf
+    juno: etc/swift/juno/object-server.conf
+    kilo: etc/swift/juno/object-server.conf
+  swift.conf:
+    havanna: etc/swift/havanna/swift.conf
+    juno: etc/swift/juno/swift.conf
+    kilo: etc/swift/juno/swift.conf
