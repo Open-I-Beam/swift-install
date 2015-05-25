@@ -17,7 +17,6 @@
 - include: swift-add-repositories.yml 
 - include: keystone.yml
 - include: swift-install-git.yml
-  when: installation_source=="git"
 - include: swift-proxy-install.yml
 - include: swift-proxy-configure.yml
 - include: swift-storage-install.yml

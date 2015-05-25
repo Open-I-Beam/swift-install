@@ -19,4 +19,5 @@
   sudo: True
   gather_facts: True
   roles:
-   - swift-install-git
+   - role: swift-install-git
+     when: installation_source == 'git'
