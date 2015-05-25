@@ -80,29 +80,36 @@ class Inventory:
                 self.conf['vagrant']['machines'][group]['num'])]
         g['vars'] = {}
         return g
+    
+    def __get_host_or_group_vars__(self, host_group_section, host_group):
+        '''
+        retrieves hostvars's or groupvars's 
+        section element from config file
+        '''
+        ansible = self.conf['ansible']
+        if (host_group_section in ansible) and\
+            (host_group in ansible[host_group_section]):
+              return ansible[host_group_section][host_group]
+        return {}
+
+
+    def __group_vars__(self, group):
+        return self.__get_host_or_group_vars__('groupvars', group)
+    
+    def __host_vars__(self, host):
+        return self.__get_host_or_group_vars__('hostvars', host)
 
     def __all_group_vars__(self):
         conf = self.conf
         ips = self.ips
         out = dict(
-            keystone_admin_token='ADMIN',
-            keystone_admin_password='passw0rd',
-            swift_hash_path_prefix='d55ca1881f1e09b1',
-            swift_hash_path_suffix='a3f3c381c916a198',
-            swift_identity_password='passw0rd',
-            openstack_region=1,
-            global_log_verbose=False,
-            global_log_debug=False,
             keystone_endpoint_host=ips['keystone_ip'],
             keystone_internal_url='http://%s:5000/v2.0' % (ips['keystone_ip']),
             keystone_admin_url='http://%s:35357/v2.0' % (ips['keystone_ip']),
             keystone_public_url='http://%s:5000/v2.0' % (ips['keystone_ip']),
-            openstack_version=self.conf['openstack_version'],
-            installation_source='git',
         )
 
-        if 'groupvars' in conf:
-            out.update(conf['groupvars'])
+        out.update(self.__group_vars__('all'))
 
         return out
 
@@ -116,11 +123,7 @@ class Inventory:
 
         def client():
             ipind = int(name[6:])
-            out = {}
-            out['cosbench_controller'] = False
-            if ipind == 0:
-                out['cosbench_controller'] = True
-            return (out, self.ips['client_ips'][ipind])
+            return ({}, self.ips['client_ips'][ipind])
 
         def proxy():
             ipind = int(name[5:])
@@ -152,10 +155,11 @@ class Inventory:
 
             if len(ip) > 0:
                 out['ansible_ssh_host'] = ip
-                out.update(self.conf['credentials'])
+                out.update(self.conf['ansible']['credentials'])
         except:
             pass
-
+        
+        out.update(self.__host_vars__(name))
         return out
 
     def __add_host_group__(self, name):
@@ -175,7 +179,7 @@ class Inventory:
             out = self.__host_group__('storage')
             device_list = list_n_disks(
                 self.conf['vagrant']['machines']['storage']['disk'],
-                self.conf['fstype'])
+                self.conf['ansible']['fstype'])
             out['vars'] = dict(
                 account_server_port=6002,
                 container_server_port=6001,
@@ -244,6 +248,7 @@ class Inventory:
                 out[group_name] = res
                 if 'vars' not in res:
                     out[group_name]['vars'] = {}
+                out[group_name]['vars'].update(self.__group_vars__(group_name))    
         return out
 
 
