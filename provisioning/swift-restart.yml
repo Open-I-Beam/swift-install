@@ -82,7 +82,6 @@
         - container-updater
         - account-auditor
         - object-replicator
-        - container-sync
         - container-replicator
         - object-auditor
         - object-expirer
