@@ -1,0 +1,66 @@
+#---------------------------------------------------------------------------
+# Copyright IBM Corp. 2015, 2015 All Rights Reserved
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# Limitations under the License.
+#---------------------------------------------------------------------------
+# Written By George Goldberg (georgeg@il.ibm.com)
+---
+os_packages:
+  Debian:
+    - python-swiftclient
+    - python-webob
+    - curl
+    - gcc
+    - git-core
+    - git
+    - libffi-dev
+    - python-setuptools
+    - python-coverage
+    - python-dev
+    - python-nose
+    - python-simplejson
+    - python-xattr
+    - python-eventlet
+    - python-greenlet
+    - python-pastedeploy
+    - python-netifaces
+    - python-pip
+    - python-dnspython
+    - python-mock
+  RedHat:
+    - python-swiftclient
+    - curl
+    - gcc 
+    - git-core
+    - libffi-devel
+    - python-setuptools
+    - python-coverage
+    - python-devel
+    - python-nose
+    - python-simplejson
+    - pyxattr
+    - python-eventlet
+    - python-greenlet
+    - python-paste-deploy
+    - python-netifaces
+    - python-pip
+    - python-dns
+    - python-mock
+
+packages: "{{ os_packages[ansible_os_family] }}"
+
+swift_git: https://github.com/openstack/swift.git
+swift_git_tag: "2.3.0"
+swift_git_dir: /tmp/git/swift
+
+
+

@@ -16,16 +16,23 @@
 ---
 common_os_packages:
   Debian:
-    - memcached
-    - python-memcache
-    - python-swiftclient
-    - python-webob
-    - swift
-    - swift-proxy
+    packages:
+      - memcached
+      - python-memcache
+      - python-swiftclient
+      - python-webob
+      - swift
+      - swift-proxy
+    git:
+      - memcached
   RedHat:
-    - openstack-swift-proxy
-    - memcached
-    - python-swiftclient
+    packages:
+      - openstack-swift-proxy
+      - memcached
+      - python-swiftclient
+    git:
+      - memcached
+      
 
 os_packages:
   Debian:
@@ -43,15 +50,21 @@ os_packages:
     kilo:
       - python-keystonemiddleware
 
-packages: "{{ common_os_packages[ansible_os_family] + os_packages[ansible_os_family][openstack_version] }}"
+packages: "{{ common_os_packages[ansible_os_family][installation_source] + os_packages[ansible_os_family][openstack_version] }}"
 
 os_services:
   Debian:
-    - memcached
+    packages:    
+      - memcached
+    git:
+      - memcached
   RedHat:
-    - memcached
+    packages:
+      - memcached
+    git:
+      - memcached
 
-services: "{{ os_services[ansible_os_family] }}"
+services: "{{ os_services[ansible_os_family][installation_source] }}"
 
 config_files:
   proxy-server.conf:

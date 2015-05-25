@@ -1,0 +1,61 @@
+#---------------------------------------------------------------------------
+# Copyright IBM Corp. 2015, 2015 All Rights Reserved
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# Limitations under the License.
+#---------------------------------------------------------------------------
+# Written By George Goldberg (georgeg@il.ibm.com)
+---
+- include: Debian.yml
+  when: ansible_os_family == 'Debian'
+
+- include: RedHat.yml
+  when: ansible_os_family == 'RedHat'
+
+- name: create group swift
+  group:
+    name: swift
+    gid: 160
+    system: yes
+
+- name: create user swift
+  user:
+    name: swift
+    uid: 160
+    comment: "OpenStack Swift Daemons"
+    group: swift
+    shell: /sbin/nologin
+    system: yes
+    createhome: no
+    home: /var/lib/swift
+
+- name: create temporary directories
+  file:
+    path: "{{ item }}"
+    mode: 0750
+    state: directory
+  with_items:
+    - "{{ swift_git_dir }}"
+
+- name: checkout swift repo
+  git:
+    repo: "{{ swift_git }}"
+    version: "{{ swift_git_tag }}"
+    dest: "{{ swift_git_dir }}"
+
+- name: install pip requirements
+  pip:
+    requirements: "{{ swift_git_dir }}/requirements.txt"
+
+- name: install swift
+  shell: "python setup.py install"
+  args:
+    chdir: "{{ swift_git_dir }}"

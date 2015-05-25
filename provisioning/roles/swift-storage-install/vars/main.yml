@@ -16,19 +16,30 @@
 ---
 common_os_packages:
   Debian:
-    - python-xattr
-    - rsync
-    - swift
-    - swift-account
-    - swift-container
-    - swift-object
-    - python-keystoneclient
-    - python-swiftclient
+    packages:
+      - python-xattr
+      - rsync
+      - swift
+      - swift-account
+      - swift-container
+      - swift-object
+      - python-keystoneclient
+      - python-swiftclient
+    git:
+      - rsync
+      - sqlite3
+      - python-xattr
   RedHat:
-    - openstack-swift-account
-    - openstack-swift-container
-    - openstack-swift-object
-    - xinetd
+    packages:
+      - openstack-swift-account
+      - openstack-swift-container
+      - openstack-swift-object
+      - xinetd
+    git:
+      - rsync
+      - sqlite
+      - pyxattr
+      - xinetd
 
 os_packages:
   Debian:
@@ -40,37 +51,40 @@ os_packages:
     juno: []
     kilo: []
 
-packages: "{{ common_os_packages[ansible_os_family] + os_packages[ansible_os_family][openstack_version] }}"
+packages: "{{ common_os_packages[ansible_os_family][installation_source] + os_packages[ansible_os_family][openstack_version] }}"
 
 os_services:
   RedHat:
-    - openstack-swift-object
-    - openstack-swift-object-replicator 
-    - openstack-swift-object-updater 
-    - openstack-swift-object-auditor
-    - openstack-swift-container
-    - openstack-swift-container-replicator 
-    - openstack-swift-container-updater 
-    - openstack-swift-container-auditor
-    - openstack-swift-account
-    - openstack-swift-account-replicator
-    - openstack-swift-account-reaper
-    - openstack-swift-account-auditor
+    packages:
+      - openstack-swift-object
+      - openstack-swift-object-replicator 
+      - openstack-swift-object-updater 
+      - openstack-swift-object-auditor
+      - openstack-swift-container
+      - openstack-swift-container-replicator 
+      - openstack-swift-container-updater 
+      - openstack-swift-container-auditor
+      - openstack-swift-account
+      - openstack-swift-account-replicator
+      - openstack-swift-account-reaper
+      - openstack-swift-account-auditor
+    git: []  
   Debian:
-    - swift-account
-    - swift-account-auditor
-    - swift-account-reaper
-    - swift-account-replicator
-    - swift-container
-    - swift-container-auditor
-    - swift-container-replicator
-    - swift-container-updater
-    - swift-object
-    - swift-object-auditor
-    - swift-object-replicator
-    - swift-object-updater
-
-services: "{{ os_services[ansible_os_family] }}"
+    packages:  
+      - swift-account
+      - swift-account-auditor
+      - swift-account-reaper
+      - swift-account-replicator
+      - swift-container
+      - swift-container-auditor
+      - swift-container-replicator
+      - swift-container-updater
+      - swift-object
+      - swift-object-auditor
+      - swift-object-replicator
+      - swift-object-updater
+    git: []
+services: "{{ os_services[ansible_os_family][installation_source] }}"
 
 config_files:
   container-server.conf:

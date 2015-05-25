@@ -14,13 +14,11 @@
 #---------------------------------------------------------------------------
 # Written By George Goldberg (georgeg@il.ibm.com)
 ---
-- include: swift-add-repositories.yml 
-- include: keystone.yml
-- include: swift-install-git.yml
-  when: installation_source=="git"
-- include: swift-proxy-install.yml
-- include: swift-proxy-configure.yml
-- include: swift-storage-install.yml
-- include: swift-storage-configure.yml
-- include: swift-create-and-distribute-rings.yml
-- include: swift-restart.yml
+- name: ensure swift depency packages are installed
+  apt: 
+    pkg: "{{ item }}"
+    state: latest 
+    force: yes
+    update_cache: yes 
+    cache_valid_time: 600
+  with_items: packages 

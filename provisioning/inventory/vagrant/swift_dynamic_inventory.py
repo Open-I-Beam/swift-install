@@ -98,6 +98,7 @@ class Inventory:
             keystone_admin_url='http://%s:35357/v2.0' % (ips['keystone_ip']),
             keystone_public_url='http://%s:5000/v2.0' % (ips['keystone_ip']),
             openstack_version=self.conf['openstack_version'],
+            installation_source='git',
         )
 
         if 'groupvars' in conf:
