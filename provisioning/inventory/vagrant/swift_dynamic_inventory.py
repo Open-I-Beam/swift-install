@@ -74,14 +74,12 @@ class Inventory:
             group = 'storage'
         g = {}
         g['hosts'] = [
-            '%s%d' %
-            (group,
-             x) for x in range(
+            '%s%d' % (group,x) 
+            for x in range(
                 self.conf['vagrant']['machines'][group]['num'])]
-        g['vars'] = {}
         return g
     
-    def __get_host_or_group_vars__(self, host_group_section, host_group):
+    def __get_host_or_group_conf_vars__(self, host_group_section, host_group):
         '''
         retrieves hostvars's or groupvars's 
         section element from config file
@@ -93,11 +91,11 @@ class Inventory:
         return {}
 
 
-    def __group_vars__(self, group):
-        return self.__get_host_or_group_vars__('groupvars', group)
+    def __conf_group_vars__(self, group):
+        return self.__get_host_or_group_conf_vars__('groupvars', group)
     
-    def __host_vars__(self, host):
-        return self.__get_host_or_group_vars__('hostvars', host)
+    def __conf_host_vars__(self, host):
+        return self.__get_host_or_group_conf_vars__('hostvars', host)
 
     def __all_group_vars__(self):
         conf = self.conf
@@ -109,7 +107,7 @@ class Inventory:
             keystone_public_url='http://%s:5000/v2.0' % (ips['keystone_ip']),
         )
 
-        out.update(self.__group_vars__('all'))
+        out.update(self.__conf_group_vars__('all'))
 
         return out
 
@@ -155,21 +153,17 @@ class Inventory:
 
             if len(ip) > 0:
                 out['ansible_ssh_host'] = ip
-                out.update(self.conf['ansible']['credentials'])
         except:
             pass
         
-        out.update(self.__host_vars__(name))
+        out.update(self.__conf_host_vars__('all'))
+        out.update(self.__conf_host_vars__(name))
         return out
 
     def __add_host_group__(self, name):
 
         def proxy():
-            out = self.__host_group__('proxy')
-            out['vars'] = dict(
-                proxy_server_port=80
-            )
-            return out
+            return self.__host_group__('proxy')
 
         def storage():
             def list_n_disks(n, fs):
@@ -181,9 +175,6 @@ class Inventory:
                 self.conf['vagrant']['machines']['storage']['disk'],
                 self.conf['ansible']['fstype'])
             out['vars'] = dict(
-                account_server_port=6002,
-                container_server_port=6001,
-                object_server_port=6000,
                 swift_devices=dict(
                     object_devices=device_list,
                     container_devices=device_list,
@@ -194,10 +185,7 @@ class Inventory:
 
         def client():
             if self.conf['vagrant']['machines']['client']['num'] > 0:
-                out = self.__host_group__('client')
-                out['vars']['cosbench_driver_ips'] =\
-                    self.ips['client_ips']
-                return out
+                return self.__host_group__('client')
             return {}
 
         def keystone():
@@ -207,24 +195,8 @@ class Inventory:
 
         def ring_builder():
             if self.proxy_storage_unified:
-                out = dict(hosts=['storage0'])
-            else:
-                out = dict(hosts=['proxy0'])
-                
-            ring_builder_data = dict(
-                part_power='18',
-                replicas='3',
-                min_part_hours='1'
-            )
-            out['vars'] = dict(   
-                ring_builder=dict(
-                    object=ring_builder_data,
-                    container=ring_builder_data,
-                    account=ring_builder_data
-                ),
-            )
-
-            return out
+                return dict(hosts=['storage0'])
+            return dict(hosts=['proxy0'])
 
         if name == 'swift-proxy':
             return proxy()
@@ -248,7 +220,7 @@ class Inventory:
                 out[group_name] = res
                 if 'vars' not in res:
                     out[group_name]['vars'] = {}
-                out[group_name]['vars'].update(self.__group_vars__(group_name))    
+                out[group_name]['vars'].update(self.__conf_group_vars__(group_name))    
         return out
 
 

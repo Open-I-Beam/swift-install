@@ -50,7 +50,7 @@
         "swift_git_tag":"2.3.0",
         "swift_git_dir":"/tmp/git/swift",
         "openstack_version":"kilo",
-        "installation_source":"packages",
+        "installation_source":"git",
         "keystone_admin_token":"ADMIN",
         "keystone_admin_password":"passw0rd",
         "swift_hash_path_prefix":"d55ca1881f1e09b1",
@@ -59,13 +59,40 @@
         "openstack_region":1,
         "global_log_verbose":false,
         "global_log_debug":false  
+      },
+      "swift-ring-builder":{
+        "ring_builder":{
+          "object":{
+            "part_power":"18",
+            "replicas":"3",
+            "min_part_hours":"1"
+          },
+          "container":{
+            "part_power":"18",
+            "replicas":"3",
+            "min_part_hours":"1"
+          },
+          "account":{
+            "part_power":"18",
+            "replicas":"3",
+            "min_part_hours":"1"
+          }
+        }
+      },
+      "swift-storage":{
+        "account_server_port":6002,
+        "container_server_port":6001,
+        "object_server_port":6000
+      },
+      "swift-proxy":{
+        "proxy_server_port":80
       }
     },
     "hostvars":{
-    },
-    "credentials":{
+      "all":{
         "ansible_ssh_user":"vagrant",
         "ansible_ssh_private_key_file":"~/.vagrant.d/insecure_private_key"
+      }
     }
   }
 }
