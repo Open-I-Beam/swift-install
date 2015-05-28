@@ -70,8 +70,8 @@ config_files:
   proxy-server.conf:
     havanna: etc/swift/havanna/proxy-server.conf
     juno: etc/swift/juno/proxy-server.conf
-    kilo: etc/swift/kilo/proxy-server.conf
+    kilo: etc/swift/juno/proxy-server.conf
   swift.conf:
     havanna: etc/swift/havanna/swift.conf
     juno: etc/swift/juno/swift.conf
-    kilo: etc/swift/kilo/swift.conf
+    kilo: etc/swift/juno/swift.conf
