@@ -41,6 +41,8 @@
     group: "swift"
     mode: 0600
   with_dict: config_files
+  tags:
+    - config_files
 
 - name: enable services 
   service: 

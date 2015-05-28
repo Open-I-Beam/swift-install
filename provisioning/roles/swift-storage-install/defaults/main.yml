@@ -1,0 +1,135 @@
+---
+#---------------------------------------------------------------------------
+# Copyright IBM Corp. 2015, 2015 All Rights Reserved
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# Limitations under the License.
+#---------------------------------------------------------------------------
+# Written By George Goldberg (georgeg@il.ibm.com)
+log_swift_stats: false
+log_statsd_host: localhost
+log_statsd_port: 8125
+log_statsd_default_sample_rate: 1.0
+log_statsd_sample_rate_factor: 1.0
+log_statsd_object_metric_prefix: object
+log_statsd_container_metric_prefix: container
+log_statsd_account_metric_prefix: account
+
+object_server_workers: auto
+object_server_max_clients: 1024
+object_server_mount_check: true
+object_server_disable_fallocate: false
+object_server_expiring_objects_container_divisor: 86400
+object_server_expiring_objects_account_name: expiring_objects
+object_server_eventlet_debug: false
+object_server_fallocate_reserve: 0
+object_server_conn_timeout: 0.5
+object_server_node_timeout: 3
+object_server_client_timeout: 60
+object_server_network_chunk_size: 65536
+object_server_disk_chunk_size: 65536
+object_server_max_upload_time: 86400
+object_server_slow: 0
+object_server_keep_cache_size: 5424880
+object_server_keep_cache_private: false
+object_server_mb_per_sync: 512
+object_server_threads_per_disk: 0
+object_server_replication_concurrency: 4
+object_server_replication_lock_timeout: 15
+object_server_replication_failure_threshold: 100
+object_server_replication_failure_ratio: 1.0
+object_server_use_splice_zero_copy: no
+
+object_replicator_vm_test_mode: no
+object_replicator_daemonize: on
+object_replicator_run_pause: 30
+object_replicator_concurrency: 1
+object_replicator_stats_interval: 300
+object_replicator_sync_method: rsync
+object_replicator_rsync_timeout: 900
+object_replicator_rsync_bwlimit: 0
+object_replicator_rsync_io_timeout: 30
+object_replicator_http_timeout: 60
+object_replicator_lockup_timeout: 1800
+object_replicator_reclaim_age: 604800
+object_replicator_ring_check_interval: 15
+object_replicator_rsync_error_log_line_length: 0
+object_replicator_handoffs_first: false
+object_replicator_handoff_delete: auto
+
+object_updater_interval: 300
+object_updater_concurrency: 1
+object_updater_slowdown: 0.01
+
+object_auditor_disk_chunk_size: 65536
+object_auditor_files_per_second: 20
+object_auditor_concurrency: 1
+object_auditor_bytes_per_second: 10000000
+object_auditor_log_time: 3600
+object_auditor_zero_byte_files_per_second: 50
+
+container_server_mount_check: true
+container_server_disable_fallocate: false
+container_server_workers: auto
+container_server_max_clients: 1024
+container_server_conn_timeout: 0.5
+container_server_node_timeout: 3
+container_server_allow_versions: false
+
+container_replicator_vm_test_mode: no
+container_replicator_per_diff: 1000
+container_replicator_max_diffs: 100
+container_replicator_concurrency: 8
+container_replicator_interval: 30
+container_replicator_node_timeout: 10
+container_replicator_conn_timeout: 0.5
+container_replicator_reclaim_age: 604800
+container_replicator_run_pause: 30
+
+container_updater_interval: 300
+container_updater_concurrency: 4
+container_updater_node_timeout: 3
+container_updater_conn_timeout: 0.5
+container_updater_slowdown: 0.01
+container_updater_account_suppression_time: 60
+
+container_auditor_interval: 1800
+container_auditor_containers_per_second: 200
+
+account_server_bind_timeout: 30
+account_server_backlog: 4096
+account_server_mount_check: true
+account_server_disable_fallocate: false
+account_server_workers: auto
+account_server_max_clients: 1024
+account_server_eventlet_debug: false
+account_server_fallocate_reserve: 0
+
+account_replicator_vm_test_mode: no
+account_replicator_per_diff: 1000
+account_replicator_max_diffs: 100
+account_replicator_concurrency: 8
+account_replicator_interval: 30
+account_replicator_error_suppression_interval: 60
+account_replicator_error_suppression_limit: 10
+account_replicator_node_timeout: 10
+account_replicator_conn_timeout: 0.5
+account_replicator_reclaim_age: 604800
+account_replicator_run_pause: 30
+
+account_auditor_interval: 1800
+
+account_reaper_concurrency: 25
+account_reaper_interval: 3600
+account_reaper_node_timeout: 10
+account_reaper_conn_timeout: 0.5
+account_reaper_delay_reaping: 0
+
