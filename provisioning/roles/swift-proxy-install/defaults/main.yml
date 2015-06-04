@@ -21,3 +21,54 @@ log_statsd_default_sample_rate: 1.0
 log_statsd_sample_rate_factor: 1.0
 log_statsd_proxy_metric_prefix: proxy
 
+proxy_server_ip: 0.0.0.0
+proxy_server_expose_info: true
+proxy_server_use_admin_key: false
+proxy_server_admin_key: secret_admin_key
+proxy_server_workers: auto
+proxy_server_max_clients: 1024
+proxy_server_ssl_enable: false
+proxy_server_ssl_cert_file: /etc/swift/proxy.crt
+proxy_server_ssl_key_file: /etc/swift/proxy.key
+proxy_server_expiring_objects_container_divisor: 86400
+proxy_server_set_trans_id_suffix: false
+proxy_server_trans_id_suffix: " "
+proxy_server_set_cors_allow_origin: false
+proxy_server_cors_allow_origin: " "
+proxy_server_client_timeout: 60
+proxy_server_eventlet_debug: false
+
+proxy_server_main_pipeline: "catch_errors gatekeeper healthcheck proxy-logging cache container_sync bulk slo ratelimit authtoken keystoneauth  container-quotas account-quotas proxy-logging proxy-server"
+
+proxy_server_log_handoffs: true
+proxy_server_recheck_account_existence: 60
+proxy_server_recheck_container_existence: 60
+proxy_server_object_chunk_size: 8192
+proxy_server_client_chunk_size: 8192
+proxy_server_node_timeout: 10
+proxy_server_conn_timeout: 0.5
+proxy_server_post_quorum_timeout: 0.5
+proxy_server_error_suppression_interval: 60
+proxy_server_error_suppression_limit: 10
+proxy_server_allow_account_management: false
+proxy_server_object_post_as_copy: true
+proxy_server_account_autocreate: true
+proxy_server_auto_create_account_prefix: "."
+proxy_server_put_queue_depth: 10
+proxy_server_rate_limit_after_segment: 10
+proxy_server_rate_limit_segments_per_sec: 1
+# The valid values for sorting_method are "affinity", "shuffle", and "timing".
+proxy_server_sorting_method: shuffle
+proxy_server_timing_expiry: 300
+proxy_server_max_large_object_get_time: 86400
+proxy_server_request_node_count: "2 * replicas"
+proxy_server_set_read_affinity: false
+proxy_server_read_affinity: " "
+proxy_server_set_write_affinity: false
+proxy_server_write_affinity: " "
+proxy_server_write_affinity_node_count: "2 * replicas"
+proxy_server_swift_owner_headers: "x-container-read, x-container-write, x-container-sync-key, x-container-sync-to, x-account-meta-temp-url-key, x-account-meta-temp-url-key-2"
+
+proxy_cache_memcache_servers: ["127.0.0.1:11211"]
+proxy_cache_memcache_serialization_support: 2
+proxy_cache_memcache_max_connections: 2
