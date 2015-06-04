@@ -32,11 +32,10 @@
 - name: ensure database is synced
   command: /usr/bin/keystone-manage db_sync
 
-- name: ensure services are started and enabled
+- name: ensure services are started
   service: 
     name: "{{ item }}"
-    state: restarted 
-    enabled: yes
+    state: started 
   with_items: debian_services
 
 # keystone seems to take a while...

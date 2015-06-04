@@ -67,7 +67,7 @@
 - name: ensure services are started and enabled
   service: 
     name: "{{ item }}"
-    state: restarted 
+    state: started 
     enabled: yes
   with_items: redhat_services
 
