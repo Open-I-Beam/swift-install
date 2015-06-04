@@ -139,3 +139,12 @@ swift-md``` (see bullet 4 above) , such that
                   * a number >=1
     * in [group_vars/swift-proxy](https://github.com/Open-I-Beam/swift-install/blob/master/provisioning/inventory/group_vars/swift-proxy) file define the following vars:
         * proxy_server_port - the port proxy server will bind to 
+    * in [group_vars/swift-ring-builder](https://github.com/Open-I-Beam/swift-install/blob/master/provisioning/inventory/group_vars/swift-ring-builder) file define the following vars:
+        * ring_builder - a dictionary with 3 entries
+           * account
+           * container
+           * object
+        * each in the following format (each one is a number , but quoted as string , for example "1")
+           * min_part_hours - the min part hours of a ring
+           * part_power - the partition power of a ring
+           * replicas - the number of replicas of each partition
