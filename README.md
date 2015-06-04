@@ -11,7 +11,7 @@ Please check [Wikis dependencies section](https://github.com/Open-I-Beam/swift-i
 
 ## General Info
 1. Inventory , with the hosts , and hostgroups definitions is defined in one file , and then can be used in ansible ad-hoc commands , and ansible-playbook commands , using **-i** switch, 
-    * For example [inventory/swift_install_hosts](https://github.com/Open-I-Beam/swift-install/blob/master/provisioning/inventory/swift_install_hosts)
+    * For example [swift_install_hosts](https://github.com/Open-I-Beam/swift-install/blob/master/provisioning/inventory/swift_install_hosts)
 
 2. Plus 2 directories (and yml formatted files within them) , that reside in a **same directory** as the inventory file (above) , note the files within should have **no!!!!** extension
     * [host_vars](https://github.com/Open-I-Beam/swift-install/tree/master/provisioning/inventory/host_vars)
