@@ -14,8 +14,8 @@ Please check [Wikis dependencies section](https://github.com/Open-I-Beam/swift-i
     * For example [inventory/swift_install_hosts](https://github.com/Open-I-Beam/swift-install/blob/master/provisioning/inventory/swift_install_hosts)
 
 2. Plus 2 directories (and yml formatted files within them) , that reside in a **same directory** as the inventory file (above) , note the files within should have **no!!!!** extension
-    * host_vars
-    * group_vars
+    * [host_vars](https://github.com/Open-I-Beam/swift-install/tree/master/provisioning/inventory/host_vars)
+    * [group_vars](https://github.com/Open-I-Beam/swift-install/tree/master/provisioning/inventory/group_vars)
 
 3. an example for running ansible [ad-hoc](http://docs.ansible.com/intro_adhoc.html) with the inventory
     * ```ansible -i inventory/swift_install_hosts swift-storage -m shell -a 'swift-init all status'```
