@@ -28,7 +28,7 @@ Please check [Wikis dependencies section](https://github.com/Open-I-Beam/swift-i
         * deploy swift using inventory, inventory/swift_install_hosts
 
 ## [Hosts](http://docs.ansible.com/intro_inventory.html#hosts-and-groups)
-1. For each host define its name and a way to access (in an iventory file) , for example:
+1. For each host define its name and a way to access ,[in an iventory file](https://github.com/Open-I-Beam/swift-install/blob/master/provisioning/inventory/swift_install_hosts) , for example:
      * ```proxy1 ansible_ssh_host=10.0.0.121 ansible_ssh_user=root ansible_ssh_pass=passw0rd```
          * a host named (in ansible) **proxy1** (nothing to do with its real hostname)
          * ansible_ssh_host - has an ip **10.0.0.121** ( can be any valid url of the target host )
