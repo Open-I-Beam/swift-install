@@ -151,6 +151,17 @@ class Machine
       end
     end
 
+    def shared_folders
+      sf = @conf.get('shared_folders', [])
+      sf.each do |f|
+        if f.key?('options')
+          @server.vm.synced_folder f['host'], f['guest'], f['options']
+        else
+          @server.vm.synced_folder f['host'], f['guest']
+        end
+      end
+    end
+
     def ansible_cloud_provision
       return unless conf.key?('ansible_cloud')
       ac = conf['ansible_cloud']
@@ -214,6 +225,9 @@ class Machine
 
       # provision shell
       shell_provision
+
+      # setup shared folders
+      shared_folders
 
       # run ansible provision only after the last machine is
       # set up , to set up to provision the whole cluster at once
