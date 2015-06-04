@@ -94,5 +94,23 @@ swift-md``` (see bullet 4 above) , such that
         * [host_vars/md1](https://github.com/Open-I-Beam/swift-install/blob/master/provisioning/inventory/host_vars/md1)
     * With the following precidence:
         * all < swift-storage < swift-md < md1 
-
+2. The following variables should be declared:
+    * in [group_vars/all](https://github.com/Open-I-Beam/swift-install/blob/master/provisioning/inventory/group_vars/all):    
+         * global_log_verbose: False
+         * global_log_debug: False
+         * keystone_endpoint_host - an ip address , or hostname of a keystone endpoint
+         * keystone_internal_url: http://{{ keystone_endpoint_host }}:5000/v2.0
+         * keystone_admin_url: http://{{ keystone_endpoint_host }}:35357/v2.0
+         * keystone_public_url: http://{{ keystone_endpoint_host }}:5000/v2.0
+         * keystone_admin_token - the security admin token of keystone 
+         * keystone_admin_password - the password of admin keystone
+         * swift_identity_password - the password of swift admin user in keystone
+         * swift_hash_path_prefix - a random string fo security
+         * swift_hash_path_suffix - a random string for security
+         * log_swift_statsd - true if you want swift to report statsd statistics
+         * openstack_version - kilo or juno ( affects both packages and config file templates)
+         * installation_source - git or packages
+         * swift_git - swift git repository in a case , installation_source == 'git'
+         * swift_git_dir - a temporary directory to clone a swift code to , in a case installation_source == 'git'
+         * swift_git_tag - the tag of a git ( a version of swift ) to clone 
 
