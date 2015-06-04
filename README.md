@@ -4,8 +4,8 @@ Ansible scripts to install Swift , on real or virtual vagrant environments. For 
 Supported OS'es ,.Ubuntu >= 14.04 , Centos/RHEL >= 7
 
 # Important!!!!   
-Please check [Wikis dependencies section](https://github.com/Open-I-Beam/swift-install/wiki/Dependencies) before deploying 
-
+1. Please check [Wikis dependencies section](https://github.com/Open-I-Beam/swift-install/wiki/Dependencies) before deploying 
+2. The provisioning scripts are located at [provisioning](https://github.com/Open-I-Beam/swift-install/tree/master/provisioning) directory , and all ansible works should be done from there ( everything that is explained below)
 # [Inventory](http://docs.ansible.com/intro_inventory.html)
 1. An example of hypothetical inventory with all minimal vars , required for an installation is located:     [provisioning/inventory](https://github.com/Open-I-Beam/swift-install/tree/master/provisioning/inventory)
 
