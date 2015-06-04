@@ -129,3 +129,12 @@ swift-md``` (see bullet 4 above) , such that
                    * for example 100 
                * fs - a filesystem to be formatted on a device
                    * xfs or ext4 
+         * In addition for each Host in this group in its [host_vars/host](https://github.com/Open-I-Beam/swift-install/blob/master/provisioning/inventory/host_vars/object1) file define the following vars:
+            * rings_info - a dictionary with the following fields
+               * ip - the ip the services will bind to on this host 
+               * zone - the zone of this host 
+                  * a number >=1
+                  * each host is adviced to be in different zone
+               * region - the region of this host
+                  * a number >=1
+                  
