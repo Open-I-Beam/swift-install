@@ -48,6 +48,8 @@ object_server_replication_failure_threshold: 100
 object_server_replication_failure_ratio: 1.0
 object_server_use_splice_zero_copy: no
 
+object_server_main_pipeline: "healthcheck recon object-server"
+
 object_replicator_vm_test_mode: no
 object_replicator_daemonize: on
 object_replicator_run_pause: 30
@@ -76,6 +78,8 @@ object_auditor_bytes_per_second: 10000000
 object_auditor_log_time: 3600
 object_auditor_zero_byte_files_per_second: 50
 
+container_server_main_pipeline: "healthcheck recon container-server"
+ 
 container_server_mount_check: true
 container_server_disable_fallocate: false
 container_server_workers: auto
@@ -103,6 +107,8 @@ container_updater_account_suppression_time: 60
 
 container_auditor_interval: 1800
 container_auditor_containers_per_second: 200
+
+account_main_pipeline: "healthcheck recon account-server"
 
 account_server_bind_timeout: 30
 account_server_backlog: 4096
