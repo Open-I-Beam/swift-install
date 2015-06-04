@@ -13,16 +13,6 @@
 # Limitations under the License.
 #---------------------------------------------------------------------------
 # Written By George Goldberg (georgeg@il.ibm.com)
-
-swift_devices: { 
-        "object_devices" : [
-            { "name" : "sda", "weight": "100", "fs": "xfs" },
-            { "name" : "sdb", "weight": "100", "fs": "xfs" },
-            { "name" : "sdc", "weight": "100", "fs": "xfs" },
-            { "name" : "sdd", "weight": "100", "fs": "xfs" }
-        ],
-        "container_devices": [
-        ],
-        "account_devices" : [
-        ]
-}
+account_server_port: 6002
+container_server_port: 6001
+object_server_port: 6000

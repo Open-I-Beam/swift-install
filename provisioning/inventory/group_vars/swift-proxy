@@ -14,13 +14,4 @@
 #---------------------------------------------------------------------------
 # Written By George Goldberg (georgeg@il.ibm.com)
 
-swift_devices: { 
-        "object_devices" : [
-        ],
-        "container_devices": [
-            { "name" : "sda", "weight": "100" , "fs": "xfs" }
-        ],
-        "account_devices" : [
-            { "name" : "sdc", "weight": "100" , "fs": "xfs" }
-        ]
-}
+proxy_server_port: 80

@@ -13,3 +13,8 @@
 # Limitations under the License.
 #---------------------------------------------------------------------------
 # Written By George Goldberg (georgeg@il.ibm.com)
+rings_info: {
+        "ip" : "10.0.0.5",
+        "zone": "3",
+        "region": "1"
+}

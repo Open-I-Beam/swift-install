@@ -14,18 +14,3 @@
 #---------------------------------------------------------------------------
 # Written By George Goldberg (georgeg@il.ibm.com)
 
-admin_ip: "swift_proxy"
-internal_ip: "swift_proxy"
-public_ip: "swift_proxy"
-
-
-
-
-
-rings_info: {
-        "ip" : "10.0.0.121",
-        "zone": "1",
-        "region": "1"
-}
-
-

@@ -1,0 +1,18 @@
+ring_builder: {
+	"account": {
+	    "min_part_hours": "1",
+	    "part_power": "18",
+	    "replicas": "3"
+	},
+	"container": {
+	    "min_part_hours": "1",
+	    "part_power": "18",
+	    "replicas": "3"
+	},
+	"object": {
+	    "min_part_hours": "1",
+	    "part_power": "18",
+	    "replicas": "3"
+	}
+}
+
