@@ -64,7 +64,9 @@ Please check [Wikis dependencies section](https://github.com/Open-I-Beam/swift-i
 5. The variables of Host Group HG1 are located at a file (relatively to the inventory file path), group_vars/HG1
 6. [**You will have to define host groups**](https://github.com/Open-I-Beam/swift-install/blob/master/provisioning/inventory/swift_install_hosts)
     * [swift-proxy](https://github.com/Open-I-Beam/swift-install/blob/master/provisioning/inventory/group_vars/swift-proxy)
+        * Defines the swift hosts that will run the [swift proxy server service](http://docs.openstack.org/juno/config-reference/content/proxy-server-configuration.html) 
     * [swift-storage](https://github.com/Open-I-Beam/swift-install/blob/master/provisioning/inventory/group_vars/swift-storage)
+        * Defines hosts that will run , swift [object](http://docs.openstack.org/juno/config-reference/content/object-server-configuration.html) ,[account](http://docs.openstack.org/juno/config-reference/content/account-server-configuration.html) and [container](http://docs.openstack.org/juno/config-reference/content/container-server-configuration.html) services 
     * [swift-ring-builder](https://github.com/Open-I-Beam/swift-install/blob/master/provisioning/inventory/group_vars/swift-ring-builder)
     * You can optionally define a group swift-client
 
