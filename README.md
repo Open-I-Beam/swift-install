@@ -57,7 +57,7 @@ Please check [Wikis dependencies section](https://github.com/Open-I-Beam/swift-i
 
 
 ## [Host Groups](http://docs.ansible.com/intro_inventory.html#hosts-and-groups)
-1. Each Host Group represents a type of a server that will be installed
+1. Each Host Group represents a type of a service that will be installed
 2. Each Host Group aggregates many hosts
 3. Each Host may belong to many Host Groups
 4. [Each Host Group may consist of many Host Groups](http://docs.ansible.com/intro_inventory.html#groups-of-groups-and-group-variables)
