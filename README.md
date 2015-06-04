@@ -68,5 +68,8 @@ Please check [Wikis dependencies section](https://github.com/Open-I-Beam/swift-i
     * [swift-storage](https://github.com/Open-I-Beam/swift-install/blob/master/provisioning/inventory/group_vars/swift-storage)
         * Defines hosts that will run , swift [object](http://docs.openstack.org/juno/config-reference/content/object-server-configuration.html) ,[account](http://docs.openstack.org/juno/config-reference/content/account-server-configuration.html) and [container](http://docs.openstack.org/juno/config-reference/content/container-server-configuration.html) services 
     * [swift-ring-builder](https://github.com/Open-I-Beam/swift-install/blob/master/provisioning/inventory/group_vars/swift-ring-builder)
+        * Contains exactly one host host , ay from swift-storage or swift-proxy groups
+    * keystone(optional)
+        * Contains exactly one host where keystone service will be installed 
     * You can optionally define a group swift-client
 
