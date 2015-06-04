@@ -94,7 +94,7 @@ swift-md``` (see bullet 4 above) , such that
         * [host_vars/md1](https://github.com/Open-I-Beam/swift-install/blob/master/provisioning/inventory/host_vars/md1)
     * With the following precidence:
         * all < swift-storage < swift-md < md1 
-2. The following variables should be declared:
+2. The following variables should be declared: ( remember that in a case of a different configuration of a specific host, the variable can be redefined in its group_vars/host file for some specific host)
     * in [group_vars/all](https://github.com/Open-I-Beam/swift-install/blob/master/provisioning/inventory/group_vars/all):    
          * global_log_verbose: False
          * global_log_debug: False
@@ -113,4 +113,19 @@ swift-md``` (see bullet 4 above) , such that
          * swift_git - swift git repository in a case , installation_source == 'git'
          * swift_git_dir - a temporary directory to clone a swift code to , in a case installation_source == 'git'
          * swift_git_tag - the tag of a git ( a version of swift ) to clone 
-    * in [group_vars/swift-storage](https://github.com/Open-I-Beam/swift-install/blob/master/provisioning/inventory/group_vars/swift-storage) , a union of [group_vars/swift-md](https://github.com/Open-I-Beam/swift-install/blob/master/provisioning/inventory/group_vars/swift-md) and [group_vars/swift-object](https://github.com/Open-I-Beam/swift-install/blob/master/provisioning/inventory/group_vars/swift-object) in our case:
+    * in [group_vars/swift-storage](https://github.com/Open-I-Beam/swift-install/blob/master/provisioning/inventory/group_vars/swift-storage) , (a union of [group_vars/swift-md](https://github.com/Open-I-Beam/swift-install/blob/master/provisioning/inventory/group_vars/swift-md) and [group_vars/swift-object](https://github.com/Open-I-Beam/swift-install/blob/master/provisioning/inventory/group_vars/swift-object) in our case):
+         * account_server_port - the port on which account service will listen
+         * container_server_port - the port on which container service will listen
+         * object_server_port - the port on which object service will listen
+         * swift_devices - 
+            * a dictionary with 3 lists
+               * object_devices
+               * container_devices
+               * account_devices
+            * each list is a list of dictionaries in the following format (each entry represents a storage device ):
+               * name - the name of the device in a /dev directory 
+                   * for example sdr , for /dev/sdr
+               * weight - the weight of the device in an appropriate swift ring
+                   * for example 100 
+               * fs - a filesystem to be formatted on a device
+                   * xfs or ext4 
