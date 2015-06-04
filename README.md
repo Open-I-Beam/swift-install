@@ -73,3 +73,8 @@ Please check [Wikis dependencies section](https://github.com/Open-I-Beam/swift-i
         * Contains exactly one host where keystone service will be installed 
     * You can optionally define a group swift-client
 
+
+## [Variables](http://docs.ansible.com/playbooks_variables.html)
+1. For example in an [inventory file](https://github.com/Open-I-Beam/swift-install/blob/master/provisioning/inventory/swift_install_hosts) we have a host [md1](https://github.com/Open-I-Beam/swift-install/blob/master/provisioning/inventory/host_vars/md1) , which is a part of a group [swift-md](https://github.com/Open-I-Beam/swift-install/blob/master/provisioning/inventory/group_vars/swift-md) , which byitself is a subgroup of a group [swift-storage](https://github.com/Open-I-Beam/swift-install/blob/master/provisioning/inventory/group_vars/swift-storage)
+
+
