@@ -113,4 +113,4 @@ swift-md``` (see bullet 4 above) , such that
          * swift_git - swift git repository in a case , installation_source == 'git'
          * swift_git_dir - a temporary directory to clone a swift code to , in a case installation_source == 'git'
          * swift_git_tag - the tag of a git ( a version of swift ) to clone 
-
+    * in [group_vars/swift-storage](https://github.com/Open-I-Beam/swift-install/blob/master/provisioning/inventory/group_vars/swift-storage) , a union of [group_vars/swift-md](https://github.com/Open-I-Beam/swift-install/blob/master/provisioning/inventory/group_vars/swift-md) and [group_vars/swift-object](https://github.com/Open-I-Beam/swift-install/blob/master/provisioning/inventory/group_vars/swift-object) in our case:
