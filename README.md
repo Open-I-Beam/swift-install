@@ -55,7 +55,7 @@ ansible-playbook -i inventory/swift_install_hosts main-install.yml
          * object  
          * container
          * account
-     * keystone(optionally) , note that if you don't want ot install a keystone service , just remove the line ```- include: keystone.yml``` in main-install.yml
+     * keystone(optionally) , note that if you don't want ot install a keystone service , just remove the line ```- include: keystone.yml``` in [main-install.yml](https://github.com/Open-I-Beam/swift-install/blob/master/provisioning/main-install.yml)
 
 3. A variables for Host1 are located at (relatively to the inventory file path), host_vars/Host1 
 
