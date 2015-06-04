@@ -67,7 +67,7 @@ Please check [Wikis dependencies section](https://github.com/Open-I-Beam/swift-i
         * Defines the swift hosts that will run the [swift proxy server service](http://docs.openstack.org/juno/config-reference/content/proxy-server-configuration.html) 
     * [swift-storage](https://github.com/Open-I-Beam/swift-install/blob/master/provisioning/inventory/group_vars/swift-storage)
         * Defines hosts that will run , swift [object](http://docs.openstack.org/juno/config-reference/content/object-server-configuration.html) ,[account](http://docs.openstack.org/juno/config-reference/content/account-server-configuration.html) and [container](http://docs.openstack.org/juno/config-reference/content/container-server-configuration.html) services 
-        * In an [example inventory](https://github.com/Open-I-Beam/swift-install/tree/master/provisioning/inventory) I have separated this group into 2 groups: ```[swift-storage:children]     
+        * In an [example inventory](https://github.com/Open-I-Beam/swift-install/blob/master/provisioning/inventory/swift_install_hosts) I have separated this group into 2 groups: ```[swift-storage:children]     
 swift-object    
 swift-md``` (see bullet 4 above) , such that
              * I can separate variables that common to [object servers](https://github.com/Open-I-Beam/swift-install/blob/master/provisioning/inventory/group_vars/swift-object)
