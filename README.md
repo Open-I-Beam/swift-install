@@ -27,7 +27,7 @@ Please check [Wikis dependencies section](https://github.com/Open-I-Beam/swift-i
     * ```ansible-playbook -i inventory/swift_install_hosts main-install.yml```
         * deploy swift using inventory, inventory/swift_install_hosts
 
-## Hosts
+## [Hosts](http://docs.ansible.com/intro_inventory.html#hosts-and-groups)
 1. For each host define its name and a way to access (in an iventory file) , for example:
      * ```proxy1 ansible_ssh_host=10.0.0.121 ansible_ssh_user=root ansible_ssh_pass=passw0rd```
          * a host named (in ansible) **proxy1** (nothing to do with its real hostname)
@@ -51,8 +51,20 @@ Please check [Wikis dependencies section](https://github.com/Open-I-Beam/swift-i
          * account
      * keystone(optionally) , note that if you don't want ot install a keystone service , just remove the line ```- include: keystone.yml``` in main-install.yml
 
-3. A one host may serve for more than one service , moreover all services can be installed on one , **allinone** host (see Host Groups)
+3. A variables for Host1 are located at (relatively to the inventory file path), host_vars/Host1 
+
+4. A one host may serve for more than one service , moreover all services can be installed on one , **allinone** host (see Host Groups)
 
 
-## Host Groups 
+## [Host Groups](http://docs.ansible.com/intro_inventory.html#hosts-and-groups)
+1. Each Host Group represents a type of a server that will be installed
+2. Each Host Group aggregates many hosts
+3. Each Host may belong to many Host Groups
+4. [Each Host Group may consist of many Host Groups](http://docs.ansible.com/intro_inventory.html#groups-of-groups-and-group-variables)
+5. The variables of Host Group HG1 are located at a file (relatively to the inventory file path), group_vars/HG1
+6. [**You will have to define host groups**](https://github.com/Open-I-Beam/swift-install/blob/master/provisioning/inventory/swift_install_hosts)
+    * [swift-proxy](https://github.com/Open-I-Beam/swift-install/blob/master/provisioning/inventory/group_vars/swift-proxy)
+    * [swift-storage](https://github.com/Open-I-Beam/swift-install/blob/master/provisioning/inventory/group_vars/swift-storage)
+    * [swift-ring-builder](https://github.com/Open-I-Beam/swift-install/blob/master/provisioning/inventory/group_vars/swift-ring-builder)
+    * You can optionally define a group swift-client
 
