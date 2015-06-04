@@ -137,4 +137,5 @@ swift-md``` (see bullet 4 above) , such that
                   * each host is adviced to be in different zone
                * region - the region of this host
                   * a number >=1
-                  
+    * in [group_vars/swift-proxy](https://github.com/Open-I-Beam/swift-install/blob/master/provisioning/inventory/group_vars/swift-proxy) file define the following vars:
+        * proxy_server_port - the port proxy server will bind to 
