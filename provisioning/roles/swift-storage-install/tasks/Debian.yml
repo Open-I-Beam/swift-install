@@ -34,8 +34,22 @@
 - name: enable rsync in /etc/default
   command: sed -i '/^RSYNC_ENABLE=/s/false/true/' /etc/default/rsync
 
+- name: ensure rsync service is stopped
+  service: 
+    name: rsync
+    state: stopped 
+    enabled: yes
+  register: stop_rsync
+  until: stop_rsync|success
+  retries: 5
+  delay: 4
+
 - name: ensure rsync service is started
   service: 
     name: rsync
-    state: restarted 
+    state: started 
     enabled: yes
+  register: start_rsync
+  until: start_rsync|success
+  retries: 5
+  delay: 4
