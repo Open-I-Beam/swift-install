@@ -41,8 +41,8 @@
     name: swift
     type: object-store
     description: "Object Storage Service"
-    public_url:  "http://{{ admin_ip }}:80/v1/AUTH_%(tenant_id)s"
-    admin_url:  "http://{{ internal_ip }}:80/v1/AUTH_%(tenant_id)s"
-    internal_url:  "http://{{ public_ip }}:80/v1/AUTH_%(tenant_id)s"
+    admin_url:  "http://{{ proxy_admin_ip }}:80/v1/AUTH_%(tenant_id)s"
+    internal_url:  "http://{{ proxy_internal_ip }}:80/v1/AUTH_%(tenant_id)s"
+    public_url:  "http://{{ proxy_public_ip }}:80/v1/AUTH_%(tenant_id)s"
   delegate_to: "{{ groups['keystone'][0] }}"
     
