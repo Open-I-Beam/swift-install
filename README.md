@@ -135,10 +135,15 @@ swift-md``` (see bullet 4 above) , such that
                * zone - the zone of this host 
                   * a number >=1
                   * each host is adviced to be in different zone
-               * region - the region of this host
+               * region - the region of this host 
                   * a number >=1
     * in [group_vars/swift-proxy](https://github.com/Open-I-Beam/swift-install/blob/master/provisioning/inventory/group_vars/swift-proxy) file define the following vars:
         * proxy_server_port - the port proxy server will bind to 
+        * In addition for each Host in this group in its [host_vars/host](https://github.com/Open-I-Beam/swift-install/blob/master/provisioning/inventory/host_vars/proxy1)
+            * proxy_internal_ip - ip used for keystone internal ip , and memcached
+            * proxy_public_ip - public service ip which it binds to
+            * proxy_admin_ip - the keystone admin ip for proxy
+                * all of the ips can be the same  
     * in [group_vars/swift-ring-builder](https://github.com/Open-I-Beam/swift-install/blob/master/provisioning/inventory/group_vars/swift-ring-builder) file define the following vars:
         * ring_builder - a dictionary with 3 entries
            * account
