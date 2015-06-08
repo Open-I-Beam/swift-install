@@ -13,4 +13,6 @@
 # Limitations under the License.
 #---------------------------------------------------------------------------
 # Written By George Goldberg (georgeg@il.ibm.com)
-
+proxy_internal_ip: 10.0.0.1
+proxy_public_ip: 10.0.0.1
+proxy_admin_ip: 10.0.0.1
