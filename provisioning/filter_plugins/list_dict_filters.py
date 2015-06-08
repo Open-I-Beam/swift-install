@@ -44,6 +44,12 @@ def extractfromdict(d, l):
         r.append(get_dict_path(d, f)[1])
     return r
 
+def extractfromlist(l, name):
+    r = []
+    for f in l:
+        r.append(f[name])
+    return r    
+
 
 def dictrearrange(d, vals):
     o = {}
@@ -93,6 +99,7 @@ class FilterModule(object):
     def filters(self):
         return {
             'extractfromdict': extractfromdict,
+            'extractfromlist': extractfromlist,
             'propagatevalue': propagatevalue,
             'listflatten': listflatten,
             'addfield': addfield,
