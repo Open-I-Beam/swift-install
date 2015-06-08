@@ -20,16 +20,12 @@
   gather_facts: True
   pre_tasks:
    - set_fact:
-      storage_vars: "{{ hostvars|extractfromdict(groups['swift-storage']) }}"
-   - set_fact:   
-      object_devices: "{{ storage_vars|map('propagatevalue','swift_devices.object_devices','device', {'ring':'rings_info','ring.port':'object_server_port'}) | listflatten | addfield('type','object') }}"
-      container_devices: "{{ storage_vars|map('propagatevalue','swift_devices.container_devices','device', {'ring':'rings_info','ring.port':'container_server_port'}) | listflatten | addfield('type','container') }}"
-      account_devices: "{{ storage_vars|map('propagatevalue','swift_devices.account_devices','device', {'ring':'rings_info','ring.port':'account_server_port'}) | listflatten | addfield('type','account') }}"
-   - set_fact:  
-      all_devices: "{{ object_devices + container_devices + account_devices }}"
+      storage_vars:     "{{ hostvars | extractfromdict(groups['swift-storage']) }}"
   roles:
    - role: swift-create-rings 
-     devices: "{{ all_devices }}"
+     object_devices:    "{{ storage_vars | fetch_swift_ring('object') }}"
+     container_devices: "{{ storage_vars | fetch_swift_ring('container') }}"
+     account_devices:   "{{ storage_vars | fetch_swift_ring('account') }}"
    
 - name: distribute rings
   hosts: swift-proxy:swift-storage

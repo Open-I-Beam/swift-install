@@ -37,7 +37,7 @@
     region: "{{ item.ring.region }}"
     zone: "{{ item.ring.zone }}"
     weight: "{{ item.device.weight }}"
-  with_items: devices
+  with_items: object_devices + container_devices + account_devices
   sudo_user: swift 
 
 - name: rebalance rings
