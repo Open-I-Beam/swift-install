@@ -18,6 +18,14 @@
 
 require 'json'
 
+# Adding a method to return The same hash with keys as symbols
+# instead strings
+class Hash
+  def keys_to_sym
+    Hash[map { |k, v| [k.to_sym, v] }]
+  end
+end
+
 # ConfigFile , parses the json config file vagrant_config.json
 class ConfigFile
   private
@@ -140,7 +148,7 @@ class Machine
 
       (1..disk_num).each do |did|
         device_file = "./disk_#{@conf.type}_#{@pid}_storage_#{did}.vdi"
-        setup_storage_device(device_file, size, controller, did)
+        setup_storage_device device_file, size, controller, did
       end
     end
 
@@ -151,14 +159,18 @@ class Machine
       end
     end
 
+    def mount_shared_folder(f)
+      if f.key?('options')
+        f['sym_options'] ||= f['options'].keys_to_sym
+        @server.vm.synced_folder f['host'], f['guest'], **f['sym_options']
+      else
+        @server.vm.synced_folder f['host'], f['guest']
+      end
+    end
+
     def shared_folders
-      sf = @conf.get('shared_folders', [])
-      sf.each do |f|
-        if f.key?('options')
-          @server.vm.synced_folder f['host'], f['guest'], f['options']
-        else
-          @server.vm.synced_folder f['host'], f['guest']
-        end
+      @conf.get('shared_folders', []).each do |f|
+        mount_shared_folder f
       end
     end
 
@@ -179,8 +191,8 @@ class Machine
     def setup_basic_parameters
       # setup cpu and memory for the machine
       @server.vm.provider 'virtualbox' do |v|
-        v.cpus = @conf.get('cpus', 1)
-        v.memory = @conf.get('memory', 1024)
+        v.cpus = @conf.get 'cpus', 1
+        v.memory = @conf.get 'memory', 1024
       end
     end
 
@@ -244,11 +256,11 @@ Vagrant.configure(2) do |config|
   end
 
   ConfigFile.conf['machines'].keys.each do |m|
-    machine_conf = MachineConfig.new(m)
-    num = machine_conf.get('num', 0)
+    machine_conf = MachineConfig.new m
+    num = machine_conf.get 'num', 0
     (0..(num - 1)).each do |pid|
       config.vm.define "#{m}#{pid}" do |server|
-        machine = Machine.new(server, machine_conf, pid)
+        machine = Machine.new server, machine_conf, pid
         machine.setup
       end
     end
