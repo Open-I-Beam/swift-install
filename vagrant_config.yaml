@@ -1,0 +1,75 @@
+vagrant:
+  machines:
+    client:
+      num: 1
+    dockerhub:
+      num: 0
+    proxy:
+      num: 1
+    storage:
+      disk: 2
+      disk_size: 32
+      num: 2
+  boxes:
+    centos7:
+      box: centbox
+      disk_controller: SATA Controller
+    ubuntu1404:
+      box: ubuntu/trusty64
+      box_url: https://vagrantcloud.com/ubuntu/boxes/trusty64
+      disk_controller: SATAController
+  ansible_cloud:
+    inventory_path: vagrant_swift_dynamic_inventory.py
+    playbook: provisioning/main-vagrant.yml
+  box: ubuntu1404
+  cpus: 2
+  ip_prefix: 192.169.70
+  memory: 2048
+  shell:
+  - echo "$(id)"
+  - echo "$(hostname)"
+
+########################################################################    
+
+ansible:
+  fstype: xfs
+  groupvars:
+    all:
+      global_log_debug: false
+      global_log_verbose: false
+      installation_source: packages
+      keystone_admin_password: passw0rd
+      keystone_admin_token: ADMIN
+      log_swift_statsd: false
+      openstack_region: 1
+      openstack_version: kilo
+      swift_git: https://github.com/openstack/swift.git
+      swift_git_dir: /tmp/git/swift
+      swift_git_tag: 2.3.0
+      swift_hash_path_prefix: d55ca1881f1e09b1
+      swift_hash_path_suffix: a3f3c381c916a198
+      swift_identity_password: passw0rd
+    swift-proxy:
+      proxy_server_port: 80
+    swift-ring-builder:
+      ring_builder:
+        account:
+          min_part_hours: '1'
+          part_power: '18'
+          replicas: '3'
+        container:
+          min_part_hours: '1'
+          part_power: '18'
+          replicas: '3'
+        object:
+          min_part_hours: '1'
+          part_power: '18'
+          replicas: '3'
+    swift-storage:
+      account_server_port: 6002
+      container_server_port: 6001
+      object_server_port: 6000
+  hostvars:
+    all:
+      ansible_ssh_private_key_file: ~/.vagrant.d/insecure_private_key
+      ansible_ssh_user: vagrant

@@ -17,6 +17,7 @@
 # vi: set ft=ruby :
 
 require 'json'
+require 'yaml'
 
 # Adding a method to return The same hash with keys as symbols
 # instead strings
@@ -50,12 +51,13 @@ class ConfigFile
     attr_reader :machine_num
 
     def self.conf
-      @conf ||= ConfigFile.new('vagrant_config.json')
+      @conf ||= ConfigFile.new('vagrant_config.yaml')
     end
 
     def initialize(filename)
-      content = File.read(filename)
-      @config_hash = JSON.parse(content)
+      # content = File.read(filename)
+      # @config_hash = JSON.parse(content)
+      @config_hash = YAML.load_file(filename)
       @config_hash = @config_hash['vagrant']
       @iptables = {}
       @machine_num = 0

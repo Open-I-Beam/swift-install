@@ -17,7 +17,7 @@
 
 import argparse
 import json
-
+import yaml
 
 class Inventory:
 
@@ -42,7 +42,7 @@ class Inventory:
 
         with open(name) as f:
             # this function is a bit ugly and should be rewritten
-            self.conf = json.loads(f.read())
+            self.conf = yaml.load(f)
             machines = self.conf['vagrant']['machines']
             self.proxy_storage_unified =\
                 machines['proxy']['num'] == 0
@@ -230,7 +230,7 @@ def main():
     parser.add_argument('--host')
     parser.add_argument('--ips', action='store_true')
     args = parser.parse_args()
-    inventory = Inventory('vagrant_config.json')
+    inventory = Inventory('vagrant_config.yaml')
     out = {}
     if args.list:
         out = inventory.show_list()
