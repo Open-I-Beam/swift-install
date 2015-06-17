@@ -55,8 +55,6 @@ class ConfigFile
     end
 
     def initialize(filename)
-      # content = File.read(filename)
-      # @config_hash = JSON.parse(content)
       @config_hash = YAML.load_file(filename)
       @config_hash = @config_hash['vagrant']
       @iptables = {}
