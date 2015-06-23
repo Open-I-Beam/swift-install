@@ -112,6 +112,7 @@ class MachineConfig
 end
 
 # An instance of a configured single machine
+# rubocop:disable ClassLength
 class Machine
   private
 
@@ -161,8 +162,8 @@ class Machine
 
     def mount_shared_folder(f)
       if f.key?('options')
-        f['sym_options'] ||= f['options'].keys_to_sym
-        @server.vm.synced_folder f['host'], f['guest'], **f['sym_options']
+        @server.vm.synced_folder f['host'], f['guest'],
+                                 **(f['options'].keys_to_sym)
       else
         @server.vm.synced_folder f['host'], f['guest']
       end
@@ -202,10 +203,29 @@ class Machine
       @server.vm.box_url = box['box_url'] if box.key?('box_url')
     end
 
-    def setup_network
+    def setup_global_network
       ip_address = @conf.ip(@pid)
       @server.vm.network 'private_network', ip: ip_address
       @server.vm.hostname = "#{@conf.type}#{@pid}"
+    end
+
+    def add_network(n)
+      if n.key?('options')
+        @server.vm.network n['type'], **(n['options'].keys_to_sym)
+      else
+        @server.vm.network n['type']
+      end
+    end
+
+    def add_configured_networks
+      @conf.get('networks', []).each do |n|
+        add_network n
+      end
+    end
+
+    def setup_network
+      setup_global_network
+      add_configured_networks
     end
 
   public
