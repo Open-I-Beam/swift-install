@@ -1,0 +1,50 @@
+---
+# Create your keys first, for example
+# mkdir ~/.ssh
+# sudo chmod 700 ~/.ssh
+# ssh-keygen -t rsa 
+- hosts: all
+  sudo: yes
+  vars:
+    my_public_key: /root/.ssh/id_rsa.pub
+    my_private_key: /root/.ssh/id_rsa
+  tasks:
+    - name: copy authorized public key
+      authorized_key:
+       user: root
+       key: "{{ lookup('file', my_public_key) }}"
+
+
+    - name: ensure that /root/.ssh/ directory exists
+      file:
+          path: /root/.ssh/
+          state: directory
+
+    - name: copy private key to other hosts
+      copy:
+        src: "{{ item }}"
+        dest: /root/.ssh/
+        mode: "u=rw,g=,o="
+      with_items:
+       - "{{ my_public_key }}"
+       - "{{ my_private_key }}"
+      tags:
+        - copy_key
+
+    - name: add to /etc/hosts
+      lineinfile:
+          dest: /etc/hosts
+          line: "{{ hostvars[inventory_hostname].ansible_ssh_host }} {{ inventory_hostname }}"
+          state: present
+      delegate_to: 127.0.0.1
+      tags:
+        - edit_hostsfile
+
+    - name: add all hosts to /etc/hosts
+      lineinfile:
+          dest: /etc/hosts
+          line: "{{ hostvars[item].ansible_ssh_host }} {{ item }}"
+          state: present
+      with_items: groups['all']
+      tags:
+        - edit_hostsfile
