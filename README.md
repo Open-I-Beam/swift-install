@@ -1,7 +1,7 @@
 # swift-install
 Ansible scripts to install Swift , on real or virtual vagrant environments. For details on Vagrant virtual cluster , and implementation see [Wiki](https://github.com/Open-I-Beam/swift-install/wiki).
 
-Supported OS'es ,.Ubuntu >= 14.04 , Centos/RHEL >= 7
+Supported OS'es ,.Ubuntu >= 14.04 , Centos >= 7
 
 **the basic usage:**    
 cd provisioning    
