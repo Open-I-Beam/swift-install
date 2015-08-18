@@ -14,16 +14,10 @@
 #---------------------------------------------------------------------------
 # Written By George Goldberg (georgeg@il.ibm.com)
 
-swift_devices: {
-        "object_devices": [
-        ],
-        "container_devices": [
-            { "name" : "sdc", "weight": "1000", "fs": "xfs" },
-            { "name" : "sdd", "weight": "1000", "fs": "xfs" }
-        ],
-        "account_devices" : [
-            { "name" : "sdc", "weight": "1000", "fs": "xfs" },
-            { "name" : "sdd", "weight": "1000", "fs": "xfs" }
-        ]
-}
+swift_container_devices: 
+  - { "name" : "sdc", "weight": "1000", "fs": "xfs" }
+  - { "name" : "sdd", "weight": "1000", "fs": "xfs" }
 
+swift_account_devices: 
+  - { "name" : "sdc", "weight": "1000", "fs": "xfs" }
+  - { "name" : "sdd", "weight": "1000", "fs": "xfs" }

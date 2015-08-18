@@ -13,6 +13,6 @@
 # Limitations under the License.
 #---------------------------------------------------------------------------
 # Written By George Goldberg (georgeg@il.ibm.com)
-account_server_port: 6002
-container_server_port: 6001
-object_server_port: 6000
+swift_account_server_port: 6002
+swift_container_server_port: 6001
+swift_object_server_port: 6000

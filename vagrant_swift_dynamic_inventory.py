@@ -114,9 +114,9 @@ class Inventory:
     def show_host(self, name):
         def proxy_vars(ip, ind):
             return dict(
-                internal_ip=ip,
-                public_ip=ip,
-                admin_ip=ip
+                proxy_internal_ip=ip,
+                proxy_public_ip=ip,
+                proxy_admin_ip=ip
             )
 
         def client():
@@ -175,11 +175,9 @@ class Inventory:
                 self.conf['vagrant']['machines']['storage']['disk'],
                 self.conf['ansible']['fstype'])
             out['vars'] = dict(
-                swift_devices=dict(
-                    object_devices=device_list,
-                    container_devices=device_list,
-                    account_devices=device_list
-                )    
+                swift_object_devices=device_list,
+                swift_container_devices=device_list,
+                swift_account_devices=device_list
             )
             return out
 

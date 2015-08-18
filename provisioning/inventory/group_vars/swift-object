@@ -14,27 +14,19 @@
 #---------------------------------------------------------------------------
 # Written By George Goldberg (georgeg@il.ibm.com)
 
-swift_devices: {
-        "object_devices" : [
-           { "name" : "sdr", "weight": "4000", "fs": "xfs" },
-           { "name" : "sdc", "weight": "4000", "fs": "xfs" },
-           { "name" : "sdd", "weight": "4000", "fs": "xfs" },
-           { "name" : "sde", "weight": "4000", "fs": "xfs" },
-           { "name" : "sdf", "weight": "4000", "fs": "xfs" },
-           { "name" : "sdg", "weight": "4000", "fs": "xfs" },
-           { "name" : "sdh", "weight": "4000", "fs": "xfs" },
-           { "name" : "sdi", "weight": "4000", "fs": "xfs" },
-           { "name" : "sdj", "weight": "4000", "fs": "xfs" },
-           { "name" : "sdk", "weight": "4000", "fs": "xfs" },
-           { "name" : "sdl", "weight": "4000", "fs": "xfs" },
-           { "name" : "sdm", "weight": "4000", "fs": "xfs" },
-           { "name" : "sdn", "weight": "4000", "fs": "xfs" },
-           { "name" : "sdo", "weight": "4000", "fs": "xfs" },
-           { "name" : "sdp", "weight": "4000", "fs": "xfs" }
-        ],
-        "container_devices": [
-        ],
-        "account_devices" : [
-        ]
-
-}
+swift_object_devices: 
+  - { "name" : "sdr", "weight": "4000", "fs": "xfs" }
+  - { "name" : "sdc", "weight": "4000", "fs": "xfs" }
+  - { "name" : "sdd", "weight": "4000", "fs": "xfs" }
+  - { "name" : "sde", "weight": "4000", "fs": "xfs" }
+  - { "name" : "sdf", "weight": "4000", "fs": "xfs" }
+  - { "name" : "sdg", "weight": "4000", "fs": "xfs" }
+  - { "name" : "sdh", "weight": "4000", "fs": "xfs" }
+  - { "name" : "sdi", "weight": "4000", "fs": "xfs" }
+  - { "name" : "sdj", "weight": "4000", "fs": "xfs" }
+  - { "name" : "sdk", "weight": "4000", "fs": "xfs" }
+  - { "name" : "sdl", "weight": "4000", "fs": "xfs" }
+  - { "name" : "sdm", "weight": "4000", "fs": "xfs" }
+  - { "name" : "sdn", "weight": "4000", "fs": "xfs" }
+  - { "name" : "sdo", "weight": "4000", "fs": "xfs" }
+  - { "name" : "sdp", "weight": "4000", "fs": "xfs" }

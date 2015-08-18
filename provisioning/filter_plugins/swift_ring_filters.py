@@ -18,16 +18,20 @@
 def fetch_swift_ring(l, ring_name):
     devices_entry = "%s_devices" % (ring_name)
     port_entry = "%s_server_port" % (ring_name)
+    ring_type = ring_name[6:]
+
     r = []
     for host in l:
-        device_list = host['swift_devices'][devices_entry]
+        if devices_entry not in host:
+            continue
+        device_list = host[devices_entry]
         ring = host['rings_info']
         ring['port'] = host[port_entry]
         for device in device_list:
             r.append({
                 'device': device,
                 'ring': ring,
-                'type': ring_name
+                'type': ring_type
             })
     return r
 

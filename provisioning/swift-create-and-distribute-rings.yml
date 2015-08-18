@@ -23,9 +23,9 @@
       storage_vars:     "{{ hostvars | extractfromdict(groups['swift-storage']) }}"
   roles:
    - role: swift-create-rings 
-     object_devices:    "{{ storage_vars | fetch_swift_ring('object') }}"
-     container_devices: "{{ storage_vars | fetch_swift_ring('container') }}"
-     account_devices:   "{{ storage_vars | fetch_swift_ring('account') }}"
+     object_devices:    "{{ storage_vars | fetch_swift_ring('swift_object') }}"
+     container_devices: "{{ storage_vars | fetch_swift_ring('swift_container') }}"
+     account_devices:   "{{ storage_vars | fetch_swift_ring('swift_account') }}"
    
 - name: distribute rings
   hosts: swift-proxy:swift-storage

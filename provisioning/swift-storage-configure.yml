@@ -18,9 +18,16 @@
   hosts: swift-storage
   sudo: True
   gather_facts: True
-  tasks:
-  #- name: debug it
-  #  debug: msg="{{ item.name  }}"
-  #  with_items: storage_devices
+  pre_tasks:
+  - set_fact:
+     swift_object_devices: []
+    when: swift_object_devices is not defined  
+  - set_fact:
+     swift_container_devices: []
+    when: swift_container_devices is not defined  
+  - set_fact:
+     swift_account_devices: []
+    when: swift_account_devices is not defined  
   roles:
-   - role: swift-storage-configure-devices
+  - role: swift-storage-configure-devices
+    storage_devices: "{{ swift_object_devices | union(swift_container_devices) | union(swift_account_devices) }}"

@@ -38,14 +38,7 @@ fs: {
   }
 }
 
-
-object_devices: "{{ swift_devices.object_devices  | list  }}" 
-container_devices: "{{ swift_devices.container_devices  | list  }}" 
-account_devices: "{{ swift_devices.account_devices | list | union(container_devices) | union(object_devices) }}" 
-storage_devices: "{{ account_devices }}"
-
 fs_list: "{{ storage_devices | map(attribute='fs') | unique | list }}"
-
 
 fs_packages_str: "{% for f in fs_list %} {{ fs[f].packages[ansible_os_family] | join }} {% endfor %}" 
 

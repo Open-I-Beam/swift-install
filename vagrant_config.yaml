@@ -1,15 +1,18 @@
 vagrant:
   machines:
-    client:
-      num: 1
-    dockerhub:
-      num: 0
     proxy:
       num: 1
     storage:
       disk: 2
       disk_size: 32
       num: 2
+    client:
+      num: 1
+      networks: 
+      - type: 'forwarded_port'
+        options:
+          guest: '80'
+          host: '8080'    
   boxes:
     centos7:
       box: centbox
@@ -66,9 +69,9 @@ ansible:
           part_power: '18'
           replicas: '3'
     swift-storage:
-      account_server_port: 6002
-      container_server_port: 6001
-      object_server_port: 6000
+      swift_account_server_port: 6002
+      swift_container_server_port: 6001
+      swift_object_server_port: 6000
   hostvars:
     all:
       ansible_ssh_private_key_file: ~/.vagrant.d/insecure_private_key
