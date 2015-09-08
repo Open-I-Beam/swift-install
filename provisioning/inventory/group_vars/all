@@ -38,7 +38,8 @@ swift_identity_password: passw0rd
 # assigne random strings
 swift_hash_path_prefix: d55ca1881f1e09b1
 swift_hash_path_suffix: a3f3c381c916a198
-
+swift_keystone_fake_load_balance: true
+swift_fake_endpoint: swift_proxy_url
 log_swift_statsd: true
 openstack_version: kilo
 installation_source: git

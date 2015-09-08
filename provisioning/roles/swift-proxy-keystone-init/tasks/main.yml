@@ -45,4 +45,28 @@
     internal_url:  "http://{{ proxy_internal_ip }}:80/v1/AUTH_%(tenant_id)s"
     public_url:  "http://{{ proxy_public_ip }}:80/v1/AUTH_%(tenant_id)s"
   delegate_to: "{{ groups['keystone'][0] }}"
-    
+  when: not swift_keystone_fake_load_balance
+
+- name: add swift fake enpoint
+  keystone_service: 
+    endpoint: "{{ keystone_admin_url }}"
+    token: "{{ keystone_admin_token }}" 
+    region: "{{ openstack_region }}"
+    name: swift
+    type: object-store
+    description: "Object Storage Service"
+    admin_url:  "http://{{ swift_fake_endpoint }}:80/v1/AUTH_%(tenant_id)s"
+    internal_url:  "http://{{ swift_fake_endpoint }}:80/v1/AUTH_%(tenant_id)s"
+    public_url:  "http://{{ swift_fake_endpoint }}:80/v1/AUTH_%(tenant_id)s"
+  delegate_to: "{{ groups['keystone'][0] }}"
+  when: swift_keystone_fake_load_balance
+  run_once: true
+
+- name: add fake endpoint to /etc/hosts for fake load balance
+  lineinfile:
+      dest: /etc/hosts
+      line: "{{ proxy_public_ip }} {{ swift_fake_endpoint }}"
+      state: present
+  delegate_to: "{{ item }}"
+  with_items: proxy_mapped_clients
+  when: swift_keystone_fake_load_balance

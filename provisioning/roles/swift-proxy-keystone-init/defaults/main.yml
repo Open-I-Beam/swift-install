@@ -1,0 +1,3 @@
+---
+swift_keystone_fake_load_balance: false 
+swift_fake_endpoint: swift_proxy_url

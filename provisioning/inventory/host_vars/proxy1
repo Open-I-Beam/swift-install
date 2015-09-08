@@ -16,3 +16,5 @@
 proxy_internal_ip: 10.0.0.1
 proxy_public_ip: 10.0.0.1
 proxy_admin_ip: 10.0.0.1
+proxy_mapped_clients:
+- client1

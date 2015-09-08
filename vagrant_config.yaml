@@ -7,12 +7,12 @@ vagrant:
       disk_size: 32
       num: 2
     client:
-      num: 1
-      networks: 
-      - type: 'forwarded_port'
-        options:
-          guest: '80'
-          host: '8080'    
+      num: 2
+#      networks: 
+#      - type: 'forwarded_port'
+#        options:
+#          guest: '80'
+#          host: '8080'    
   boxes:
     centos7:
       box: centbox
@@ -51,9 +51,15 @@ ansible:
       swift_git_tag: 2.3.0
       swift_hash_path_prefix: d55ca1881f1e09b1
       swift_hash_path_suffix: a3f3c381c916a198
+      swift_keystone_fake_load_balance: true   
+      swift_fake_endpoint: swift_proxy_url
+      swift_keystone_fake_load_balance: true
       swift_identity_password: passw0rd
     swift-proxy:
       proxy_server_port: 80
+      proxy_mapped_clients:
+      - client0
+      - client1
     swift-ring-builder:
       ring_builder:
         account:
