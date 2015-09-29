@@ -20,4 +20,5 @@
   gather_facts: True
   roles:
    - role: add-openstack-repositories
+  serial: 1
 
