@@ -1,0 +1,56 @@
+{
+
+"vagrant" : {
+  "machines" : {
+    "proxy" : {
+      "num":0,
+      "box":"ubuntu1404",
+      "shell": ["apt-get -y install cowsay"]
+    },
+    "storage" : {
+      "num":1,
+      "disk":1,
+      "disk_size":32
+    },
+    "client" : {
+      "num":1
+    },
+    "dockerhub" : {
+      "num":0
+    }
+  },
+  "boxes" : {
+    
+    "centos7" : {
+      "box": "centbox" , 
+      "disk_controller" : "SATA Controller"
+    },
+
+    "ubuntu1404" : {
+      "box": "ubuntu/trusty64" , 
+      "box_url" : "https://vagrantcloud.com/ubuntu/boxes/trusty64",
+      "disk_controller" : "SATAController"
+    }
+  
+  },
+  "ansible_cloud": {
+    "playbook": "main-vagrant.yml",
+    "inventory_path": "inventory/vagrant/swift_dynamic_inventory.py"
+  },
+  "box":"centos7",
+  "cpus":2,
+  "memory":2048,
+  "ip_prefix":"192.169.70",
+  "shell":["echo \"$(id)\"",
+           "echo \"$(hostname)\""]
+},
+
+"openstack_version":"juno",
+"fstype":"xfs",
+"groupvars":{
+},
+"credentials":{
+    "ansible_ssh_user":"jenkins",
+    "ansible_ssh_private_key_file":"/home/jenkins/.ssh/id_rsa"
+}
+}
