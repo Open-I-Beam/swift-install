@@ -17,6 +17,7 @@
 - name: Configure openstack repositories
   hosts: swift-proxy:swift-storage:keystone:swift-client
   sudo: True
+  serial: 1
   gather_facts: True
   roles:
    - role: add-openstack-repositories
