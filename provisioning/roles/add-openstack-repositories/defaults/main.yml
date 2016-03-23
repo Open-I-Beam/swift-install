@@ -31,6 +31,12 @@ debian: {
    install: yes,
    repositories_address: "deb http://ubuntu-cloud.archive.canonical.com/ubuntu trusty-updates/kilo main",
    repositories_name: "/etc/apt/sources.list.d/ubuntu-cloud-archive-kilo-trusty.list"
+  },
+
+  liberty: {
+    install: yes,
+     repositories_address: "deb http://ubuntu-cloud.archive.canonical.com/ubuntu trusty-updates/liberty main",
+     repositories_name: "/etc/apt/sources.list.d/ubuntu-cloud-archive-liberty-trusty.list"
   }
 }
 

@@ -19,7 +19,7 @@
     pkg: "{{ item }}"
     state: latest 
     force: yes
-  with_items: fs_packages
+  with_items: "{{fs_packages}}"
   when: ansible_os_family == 'Debian'
 
 - name: ensure file-system packages are installed

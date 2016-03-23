@@ -32,9 +32,9 @@
     - /var/lib/swift
     - /var/lib/swift/keystone-signing
 
-- name: update configuration swift files from templates
+- name: update configuration swift files from non git templates
   template: 
-    src: "{{ item.value[openstack_version]  }}"
+    src: "{{ item.value[openstack_version] }}"
     dest: /etc/swift/{{ item.key }}
     owner: "swift"
     group: "swift"
@@ -42,6 +42,21 @@
   with_dict: config_files
   tags:
     - config_files
+  when: installation_source != 'git'
+
+- name: update configuration swift files from git
+  copy:
+    src: "{{ swift_git_dir }}/etc/{{ item }}.conf-sample"
+    dest: "/etc/swift/{{ item }}.conf"
+    owner: "swift"
+    group: "swift"
+    mode: 0600
+  tags:
+    - config_files
+  with_items:
+    - proxy-server
+    - swift
+  when: installation_source == 'git'
 
 - name: enable services 
   service: 

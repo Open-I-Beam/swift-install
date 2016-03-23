@@ -40,7 +40,7 @@
 - name: create temporary directories
   file:
     path: "{{ item }}"
-    mode: 0750
+    mode: 0755
     state: directory
   with_items:
     - "{{ swift_git_dir }}"

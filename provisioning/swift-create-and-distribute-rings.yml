@@ -14,18 +14,13 @@
 #---------------------------------------------------------------------------
 # Written By George Goldberg (georgeg@il.ibm.com)
 ---
+
 - name: create rings
   hosts: swift-ring-builder
   sudo: True
   gather_facts: True
-  pre_tasks:
-   - set_fact:
-      storage_vars:     "{{ hostvars | extractfromdict(groups['swift-storage']) }}"
   roles:
    - role: swift-create-rings 
-     object_devices:    "{{ storage_vars | fetch_swift_ring('swift_object') }}"
-     container_devices: "{{ storage_vars | fetch_swift_ring('swift_container') }}"
-     account_devices:   "{{ storage_vars | fetch_swift_ring('swift_account') }}"
    
 - name: distribute rings
   hosts: swift-proxy:swift-storage

@@ -18,12 +18,5 @@
   hosts: swift-proxy
   sudo: True
   gather_facts: True
-  pre_tasks:
-   - set_fact:
-      proxy_vars:     "{{ hostvars | extractfromdict(groups['swift-proxy']) }}"
-     tags:
-      - always
   roles:
    - role: swift-proxy-install
-     proxy_cache_memcache_servers: "{{ proxy_vars | extractfromlist('proxy_internal_ip') }}"
-

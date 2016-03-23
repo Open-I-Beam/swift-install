@@ -31,13 +31,13 @@
   swift_ring_builder:
     op: add
     type: "{{ item.type }}"
-    dev: "{{ item.device.name  }}"
-    ip: "{{ item.ring.ip  }}"
-    port: "{{ item.ring.port }}"
-    region: "{{ item.ring.region }}"
-    zone: "{{ item.ring.zone }}"
-    weight: "{{ item.device.weight }}"
-  with_items: object_devices + container_devices + account_devices
+    dev: "{{ item.name  }}"
+    ip: "{{ item.ip  }}"
+    port: "{{ item.port }}"
+    region: "{{ item.region }}"
+    zone: "{{ item.zone }}"
+    weight: "{{ item.weight }}"
+  with_items: "{{ object_devices  +  container_devices + account_devices}}"
   sudo_user: swift 
 
 - name: rebalance rings

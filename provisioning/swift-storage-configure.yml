@@ -15,7 +15,7 @@
 # Written By George Goldberg (georgeg@il.ibm.com)
 ---
 - name: Configure swift-storage server
-  hosts: swift-storage
+  hosts: swift-md + swift-object
   sudo: True
   gather_facts: True
   pre_tasks:

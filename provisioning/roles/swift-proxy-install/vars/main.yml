@@ -42,12 +42,16 @@ os_packages:
       - python-keystonemiddleware
     kilo:
       - python-keystonemiddleware
+    liberty:
+      - python-keystonemiddleware
   RedHat:
     havanna:
       - python-keystoneclient
     juno: 
       - python-keystonemiddleware
     kilo:
+      - python-keystonemiddleware
+    liberty:
       - python-keystonemiddleware
 
 packages: "{{ common_os_packages[ansible_os_family][installation_source] + os_packages[ansible_os_family][openstack_version] }}"
@@ -75,3 +79,4 @@ config_files:
     havanna: etc/swift/havanna/swift.conf
     juno: etc/swift/juno/swift.conf
     kilo: etc/swift/juno/swift.conf
+    liberty: etc/swift/juno/swift.conf
