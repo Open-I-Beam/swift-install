@@ -1,1 +1,1 @@
-ansible-playbook -i swift_install_inventory.py swift-stop.yml 
+ansible-playbook -i swift_dynamic_inventory.py swift-stop.yml 
