@@ -15,11 +15,21 @@
 # Written By George Goldberg (georgeg@il.ibm.com)
 ---
 
-- include: swift-stop.yml
-
-- name: Remove swift-storage packages
-  hosts: swift-object + swift-md + swift-proxy
+- name: Configure swift-storage server
+  hosts: swift-md + swift-object
   sudo: True
   gather_facts: True
+  pre_tasks:
+  - set_fact:
+     swift_object_devices: []
+    when: swift_devices['object_devices'] is not defined  
+  - set_fact:
+     swift_container_devices: []
+    when: swift_devices['container_devices'] is not defined  
+  - set_fact:
+     swift_account_devices: []
+    when: swift_devices['account_devices'] is not defined  
   roles:
-  - role: swift-remove-packages
+  - role: swift-storage-reset
+    storage_devices: "{{ swift_devices['object_devices'] | union(swift_devices['container_devices']) | union(swift_devices['account_devices']) }}"
+

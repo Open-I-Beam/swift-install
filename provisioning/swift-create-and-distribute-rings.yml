@@ -23,7 +23,7 @@
    - role: swift-create-rings 
    
 - name: distribute rings
-  hosts: swift-proxy:swift-storage
+  hosts: swift-proxy+ swift-object + swift-md
   sudo: True
   gather_facts: True
   roles:

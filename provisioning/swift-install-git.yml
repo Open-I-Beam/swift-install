@@ -15,7 +15,7 @@
 # Written By George Goldberg (georgeg@il.ibm.com)
 ---
 - name: Install swift from git
-  hosts: swift-proxy:swift-storage
+  hosts: swift-proxy + swift-object + swift-md
   sudo: True
   gather_facts: True
   roles:

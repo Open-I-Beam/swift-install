@@ -1,0 +1,80 @@
+#---------------------------------------------------------------------------
+# Copyright IBM Corp. 2015, 2015 All Rights Reserved
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# Limitations under the License.
+#---------------------------------------------------------------------------
+# Written By George Goldberg (georgeg@il.ibm.com)
+---
+- name: Start swift proxy services
+  hosts: swift-proxy
+  sudo: True
+  tasks:
+    - name: ensure services are started
+      service: 
+        name: "{{ item }}" 
+        state: started 
+        enabled: yes
+      with_items:
+        - memcached
+      ignore_errors: yes
+    - name: start swift
+      shell: swift-init proxy-server start
+      ignore_errors: yes
+
+- name: Start swift storage services
+  hosts: swift-object + swift-md
+  sudo: True
+  gather_facts: True
+  tasks:
+    - name: ensure services are started
+      service: 
+        name: "{{ item }}" 
+        state: started
+        enabled: yes
+      with_items:
+       - rsync
+      ignore_errors: yes
+      when: ansible_os_family == 'Debian' 
+
+- name: start md services
+  hosts: swift-md
+  sudo: True
+  gather_facts: True
+  tasks:
+  - name: swift init start
+    shell: swift-init "{{ item }}" start
+    with_items:
+      - account-server
+      - account-auditor
+      - account-replicator
+      - account-reaper
+      - container-server
+      - container-replicator
+      - container-updater
+      - container-auditor
+#     - container-reconciler
+    ignore_errors: yes
+
+- name: start md services
+  hosts: swift-object
+  sudo: True
+  gather_facts: True
+  tasks:
+  - name: swift init start
+    shell: swift-init "{{ item }}" start
+    with_items:
+      - object-replicator
+      - object-auditor
+#      - object-expirer
+      - object-server
+      - object-updater
+    ignore_errors: yes

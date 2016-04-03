@@ -25,8 +25,9 @@ class Inventory:
         #   "account_devices": [ { "type": "account",... },... ]
         # }
         def add_device_to_list(d, l):
-            if not d['name'] in [dev['name'] for dev in l]:
-                l.append(d)
+            #if not d['name'] in [dev['name'] for dev in l]:
+            #    l.append(d)
+            l.append(d)
 
         def iterate_devices_in_node(device_type, node):
             for d in node['swift_devices'][device_type]:
@@ -44,21 +45,17 @@ class Inventory:
         for node in self.conf['groups']['swift-object']:
             node_conf = self.conf[node]
             for device in iterate_devices_in_node('object_devices', node_conf):
-                device['port'] = '6000'
                 device['type'] = 'object'
                 append_ring_info_to_device(device, node_conf['rings_info'])
                 add_device_to_list(device, object_devices)
 
         for node in self.conf['groups']['swift-md']:
+            node_conf = self.conf[node]
             for device in iterate_devices_in_node('container_devices', node_conf):
-                device['port'] = '6001'
                 device['type'] = 'container'
                 append_ring_info_to_device(device, node_conf['rings_info'])
                 add_device_to_list(device, container_devices)
-
-        for node in self.conf['groups']['swift-md']:
             for device in iterate_devices_in_node('account_devices', node_conf):
-                device['port'] = '6002'
                 device['type'] = 'account'
                 append_ring_info_to_device(device, node_conf['rings_info'])
                 add_device_to_list(device, account_devices)

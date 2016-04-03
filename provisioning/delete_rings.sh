@@ -1,0 +1,5 @@
+ansible -i swift_install_inventory.py swift-ring-builder -m shell -a "rm -fr /etc/swift/*.builder"
+ansible -i swift_install_inventory.py swift-ring-builder -m shell -a "rm -fr /etc/swift/backups"
+ansible -i swift_install_inventory.py swift-proxy -m shell -a "rm -fr /etc/swift/*.ring.gz"
+ansible -i swift_install_inventory.py swift-md -m shell -a "rm -fr /etc/swift/*.ring.gz"
+ansible -i swift_install_inventory.py swift-object -m shell -a "rm -fr /etc/swift/*.ring.gz"
