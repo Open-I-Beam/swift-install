@@ -46,12 +46,12 @@ os_packages:
     havanna: []
     juno: []
     kilo: []
-    libert: []
+    liberty: []
   RedHat: 
     havanna: []
     juno: []
     kilo: []
-    libert: []
+    liberty: []
 
 packages: "{{ common_os_packages[ansible_os_family][installation_source] + os_packages[ansible_os_family][openstack_version] }}"
 

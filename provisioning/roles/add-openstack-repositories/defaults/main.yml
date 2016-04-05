@@ -52,5 +52,9 @@ redhat: {
 
   kilo: {
    install_rpm: "https://repos.fedorapeople.org/repos/openstack/openstack-kilo/rdo-release-kilo-1.noarch.rpm"
+  },
+
+  liberty: {
+    install_rpm: "https://repos.fedorapeople.org/repos/openstack/openstack-liberty/rdo-release-liberty-2.noarch.rpm"
   }
 }
