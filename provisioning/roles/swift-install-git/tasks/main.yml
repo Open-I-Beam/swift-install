@@ -51,6 +51,12 @@
     version: "{{ swift_git_tag }}"
     dest: "{{ swift_git_dir }}"
 
+- name: update pip packages
+  pip: name={{ item }} state='latest'
+  with_items:
+    - pip
+    - setuptools
+
 - name: install pip requirements
   pip:
     requirements: "{{ swift_git_dir }}/requirements.txt"

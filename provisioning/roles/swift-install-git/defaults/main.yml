@@ -23,6 +23,7 @@ os_packages:
     - git-core
     - git
     - libffi-dev
+    - liberasurecode-dev
     - python-setuptools
     - python-coverage
     - python-dev
