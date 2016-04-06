@@ -38,7 +38,7 @@
     dest: /etc/swift/{{ item.key }}
     owner: "swift"
     group: "swift"
-    mode: 0600
+    mode: 0750
   with_dict: config_files
   tags:
     - config_files
@@ -50,13 +50,25 @@
     dest: "/etc/swift/{{ item }}.conf"
     owner: "swift"
     group: "swift"
-    mode: 0600
+    mode: 0750
   tags:
     - config_files
   with_items:
     - proxy-server
     - swift
   when: installation_source == 'git'
+
+- name: patch proxy-server.conf
+  replace: dest=/etc/swift/proxy-server.conf regexp='^.*bind_port.*$' replace='bind_port = {{ proxy_port }}' backup=yes
+- replace: dest=/etc/swift/proxy-server.conf regexp='^pipeline(\s+.*)tempauth(\s+.*)$' replace='# pipeline\1tempauth\2' backup=yes
+- replace: dest=/etc/swift/proxy-server.conf regexp='^#.*pipeline(\s+.*)authtoken(\s+.*)$' replace='pipeline\1authtoken\2' backup=yes
+- replace: dest=/etc/swift/proxy-server.conf regexp='^#.*\[filter:authtoken\].*$' replace='[filter:authtoken]' backup=yes
+- replace: dest=/etc/swift/proxy-server.conf regexp='^#.*paste.filter_factory = keystonemiddleware.auth_token:filter_factory.*$' replace='paste.filter_factory = keystonemiddleware.auth_token:filter_factory' backup=yes
+- replace: dest=/etc/swift/proxy-server.conf regexp='^#.*\[filter:keystoneauth\].*$' replace='[filter:keystoneauth]' backup=yes
+- replace: dest=/etc/swift/proxy-server.conf regexp='^#.*use.*=.*egg:swift#keystoneauth.*$' replace='use = egg:swift#keystoneauth' backup=yes
+- replace: dest=/etc/swift/proxy-server.conf regexp='^.*account_autocreate.*$' replace='account_autocreate = true' backup=yes
+- lineinfile: dest=/etc/swift/proxy-server.conf insertafter='paste.filter_factory = keystonemiddleware.*$' line='auth_host={{ keystone_endpoint_host }}\nauth_port={{ keystone_endpoint_port }}\nauth_protocol={{ keystone_auth_protocol }}\nadmin_user={{ keystone_admin_user }}\nadmin_tenant_name={{ keystone_admin_tenant }}\nadmin_password={{ keystone_admin_password }}' state=present
+
 
 - name: enable services 
   service: 
