@@ -88,8 +88,8 @@ class Inventory:
         # need to dynamically construct:
         # object_devices, container_devices, account_devices
         # See swift-create-rings role
-        if name in self.conf['groups']['swift-ring-builder']:
-            res.update(self.build_devices_dict())
+        storage_devices = self.build_devices_dict()
+        res.update(storage_devices)
         #for group_vars in ['keystone', 'swift']:
         #    res.update(self.conf[group_vars]['vars'])
         return res

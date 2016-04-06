@@ -30,4 +30,4 @@
     when: swift_account_devices is not defined  
   roles:
   - role: swift-storage-configure-devices
-    storage_devices: "{{ swift_object_devices | union(swift_container_devices) | union(swift_account_devices) }}"
+    storage_devices: "{{ object_devices + container_devices + account_devices }}"
