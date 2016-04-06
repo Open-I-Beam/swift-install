@@ -43,14 +43,7 @@
   wait_for: 
     port: 35357
 
-- name: create service tenant
-  keystone_user: 
-    endpoint: "{{ keystone_admin_url }}"
-    token: "{{ keystone_admin_token }}" 
-    tenant: service 
-    tenant_description: "Service Tenant"
-
-- name: add keystone endpoint information
+- name: add keystone service
   keystone_service: 
     endpoint: "{{ keystone_admin_url }}"
     token: "{{ keystone_admin_token }}" 
@@ -61,6 +54,13 @@
     public_url: "{{ keystone_public_url }}"
     internal_url: "{{ keystone_internal_url }}"
     admin_url: "{{ keystone_admin_url }}"
+
+- name: create service project (a.k.a tenant)
+  keystone_user:
+    endpoint: "{{ keystone_admin_url }}"
+    token: "{{ keystone_admin_token }}"
+    tenant: service
+    tenant_description: "Service Tenant"
 
 - name: create admin tenant
   keystone_user: 
