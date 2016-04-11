@@ -17,18 +17,18 @@
   keystone_user: 
     endpoint: "{{ keystone_admin_url }}"
     token: "{{ keystone_admin_token }}" 
-    tenant: service 
-    user: swift 
-    password: "{{ swift_identity_password }}"
+    tenant: "{{ swift_default_tenant  }}" 
+    user: "{{ swift_default_user_name  }}"
+    password: "{{ swift_default_user_password }}"
   delegate_to: "{{ groups['keystone'][0] }}"
   run_once: true
 
 - name: add swift service user to the service tenant with the admin role
   keystone_user: 
     endpoint: "{{ keystone_admin_url }}"
-    token: "{{ keystone_admin_token }}" 
-    tenant: service 
-    user: swift 
+    token: "{{ keystone_admin_token }}"
+    tenant: "{{ swift_default_tenant  }}"
+    user: "{{ swift_default_user_name  }}"
     role: admin
   delegate_to: "{{ groups['keystone'][0] }}"
   run_once: true   

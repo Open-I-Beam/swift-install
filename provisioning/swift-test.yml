@@ -14,14 +14,11 @@
 #---------------------------------------------------------------------------
 # Written By George Goldberg (georgeg@il.ibm.com)
 ---
-- include: swift-add-repositories.yml 
-- include: keystone.yml
-- include: swift-install-git.yml
-- include: swift-proxy-install.yml
-- include: swift-proxy-configure.yml
-- include: swift-storage-install.yml
-- include: swift-storage-configure.yml
-- include: swift-create-and-distribute-rings.yml
-- include: swift-stop.yml
-- include: swift-start.yml
-- include: swift-test.yml
+- name: test swift installation
+  hosts: swift-proxy
+  tasks:
+    - name: stat
+      command: swift --os-auth-url "{{ keystone_public_url  }}"  --os-tenant-name "{{ swift_default_tenant }}" --os-username "{{ swift_default_user_name }}" --os-password "{{ swift_default_user_password }}" stat 
+#      command: swift --os-auth-url http://127.0.0.1:5000/v2.0  --os-tenant-name service --os-username swift --os-password passw0rd stat 
+      register: command_result
+      failed_when: "'FAILED!' in command_result.stdout"
