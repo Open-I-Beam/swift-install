@@ -16,7 +16,8 @@
 ---
 - name: Configure swift-storage server
   hosts: swift-md + swift-object
-  sudo: True
+  become: true
+  become_user: root
   gather_facts: True
   pre_tasks:
   - set_fact:

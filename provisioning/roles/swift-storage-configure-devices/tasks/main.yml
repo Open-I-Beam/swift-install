@@ -26,15 +26,20 @@
   yum: 
     pkg: "{{ item }}"
     state: latest 
-  with_items: fs_packages
+  with_items: "{{ fs_packages }}"
   when: ansible_os_family == 'RedHat'
+
+- name: Get mount state
+  shell: mount
+  register: mount_state
 
 - name: create filesystems on devices
   filesystem: 
     fstype: "{{ item.fs }}" 
     dev: "/dev/{{ item.name }}" 
     force: yes
-  with_items: storage_devices
+  when: not "{{ item.name }}" in "{{ mount_state.stdout_lines }}"
+  with_items: "{{ storage_devices }}"
 
 - name: create device directories
   file:
@@ -43,7 +48,7 @@
     group: "swift"
     mode: 0750
     state: directory
-  with_items: storage_devices
+  with_items: "{{ storage_devices }}"
 
 - name: mount device directories
   mount: 
@@ -52,7 +57,8 @@
     fstype: "{{ item.fs }}"
     opts: "{{ fs[item.fs].mount_options  }}"
     state: mounted
-  with_items: storage_devices
+  when: not "{{ item.name }}" in "{{ mount_state.stdout_lines }}"
+  with_items: "{{ storage_devices }}"
 
 - name: ensure /srv/node is owned by swift
   file:

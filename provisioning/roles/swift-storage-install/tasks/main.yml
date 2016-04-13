@@ -40,7 +40,7 @@
     owner: "swift"
     group: "swift"
     mode: 0600
-  with_dict: config_files
+  with_dict: "{{ config_files }}"
   tags:
     - config_files
   when: installation_source != 'git'
@@ -67,4 +67,4 @@
     name: "{{ item }}"
     enabled: yes
     state: stopped
-  with_items: services
+  with_items: "{{ services }}"
