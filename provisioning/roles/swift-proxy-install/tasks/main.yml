@@ -66,6 +66,7 @@
 - replace: dest=/etc/swift/proxy-server.conf regexp='^#.*paste.filter_factory = keystonemiddleware.auth_token:filter_factory.*$' replace='paste.filter_factory = keystonemiddleware.auth_token:filter_factory' backup=yes
 - replace: dest=/etc/swift/proxy-server.conf regexp='^#.*\[filter:keystoneauth\].*$' replace='[filter:keystoneauth]' backup=yes
 - replace: dest=/etc/swift/proxy-server.conf regexp='^#.*use.*=.*egg:swift#keystoneauth.*$' replace='use = egg:swift#keystoneauth' backup=yes
+- replace: dest=/etc/swift/proxy-server.conf regexp='^#.*delay_auth_decision.*$' replace='delay_auth_decision = True' backup=yes
 - replace: dest=/etc/swift/proxy-server.conf regexp='^.*account_autocreate.*$' replace='account_autocreate = true' backup=yes
 - lineinfile: dest=/etc/swift/proxy-server.conf insertafter='paste.filter_factory = keystonemiddleware.*$' line='auth_host={{ keystone_endpoint_host }}\nauth_port={{ keystone_endpoint_port }}\nauth_protocol={{ keystone_auth_protocol }}\nadmin_user={{ keystone_admin_user }}\nadmin_tenant_name={{ keystone_admin_tenant }}\nadmin_password={{ keystone_admin_password }}' state=present
 
