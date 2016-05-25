@@ -47,11 +47,13 @@ os_packages:
     juno: []
     kilo: []
     liberty: []
+    mitaka: []
   RedHat: 
     havanna: []
     juno: []
     kilo: []
     liberty: []
+    mitaka: []
 
 packages: "{{ common_os_packages[ansible_os_family][installation_source] + os_packages[ansible_os_family][openstack_version] }}"
 
@@ -93,15 +95,19 @@ config_files:
     havanna: etc/swift/havanna/container-server.conf
     juno: etc/swift/juno/container-server.conf
     kilo: etc/swift/juno/container-server.conf
+    mitaka: etc/swift/mitaka/container-server.conf
   account-server.conf:
     havanna: etc/swift/havanna/account-server.conf
     juno: etc/swift/juno/account-server.conf
     kilo: etc/swift/juno/account-server.conf
+    mitaka: etc/swift/mitaka/account-server.conf
   object-server.conf:
     havanna: etc/swift/havanna/object-server.conf
     juno: etc/swift/juno/object-server.conf
     kilo: etc/swift/juno/object-server.conf
+    mitaka: etc/swift/mitaka/object-server.conf
   swift.conf:
     havanna: etc/swift/havanna/swift.conf
     juno: etc/swift/juno/swift.conf
     kilo: etc/swift/juno/swift.conf
+    kilo: etc/swift/mitaka/swift.conf

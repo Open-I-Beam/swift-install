@@ -29,6 +29,14 @@
     state: stopped
   with_items: "{{ debian_services }}"
 
+- name: turn on admin token usage
+  lineinfile:
+    dest: /etc/keystone/keystone.conf
+    regexp: "^.*admin_token ="
+    line: admin_token = ADMIN
+    backup: yes
+    state: present
+ 
 - name: ensure database is synced
   command: /usr/bin/keystone-manage db_sync
 
@@ -54,6 +62,8 @@
     public_url: "{{ keystone_public_url }}"
     internal_url: "{{ keystone_internal_url }}"
     admin_url: "{{ keystone_admin_url }}"
+    ignore_other_regions: 1
+    insecure: 1
 
 - name: create service project (a.k.a tenant)
   keystone_user:

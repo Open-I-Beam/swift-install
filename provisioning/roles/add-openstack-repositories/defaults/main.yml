@@ -37,6 +37,11 @@ debian: {
     install: yes,
      repositories_address: "deb http://ubuntu-cloud.archive.canonical.com/ubuntu trusty-updates/liberty main",
      repositories_name: "/etc/apt/sources.list.d/ubuntu-cloud-archive-liberty-trusty.list"
+  },
+  mitaka: {
+    install: yes,
+     repositories_address: "deb http://ubuntu-cloud.archive.canonical.com/ubuntu trusty-updates/mitaka main",
+     repositories_name: "/etc/apt/sources.list.d/ubuntu-cloud-archive-mitaka-trusty.list"
   }
 }
 

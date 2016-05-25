@@ -1,0 +1,4 @@
+*.retry
+*.pyc
+cluster_config.json
+openstack-ansible-modules/

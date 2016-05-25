@@ -44,6 +44,9 @@ os_packages:
       - python-keystonemiddleware
     liberty:
       - python-keystonemiddleware
+    mitaka:
+      - python-keystonemiddleware
+
   RedHat:
     havanna:
       - python-keystoneclient
@@ -75,8 +78,10 @@ config_files:
     havanna: etc/swift/havanna/proxy-server.conf
     juno: etc/swift/juno/proxy-server.conf
     kilo: etc/swift/juno/proxy-server.conf
+    kilo: etc/swift/mitaka/proxy-server.conf
   swift.conf:
     havanna: etc/swift/havanna/swift.conf
     juno: etc/swift/juno/swift.conf
     kilo: etc/swift/juno/swift.conf
     liberty: etc/swift/juno/swift.conf
+    mitaka: etc/swift/mitaka/swift.conf

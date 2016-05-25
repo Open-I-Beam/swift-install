@@ -18,7 +18,7 @@
   apt: name=python-software-properties update_cache=yes
   when: debian[openstack_version].install
 
-- name: add juno apt repositories file to /etc/apt/sources.list.d
+- name: add openstack apt repositories file to /etc/apt/sources.list.d
   lineinfile: 
     dest="{{ debian[openstack_version].repositories_name }}"
     state=present
@@ -34,3 +34,7 @@
 - name: apt-get update
   apt: update_cache=yes
   when: debian[openstack_version].install
+
+- name: clone openstack ansible libraries (for keystone configuration)
+  git: repo=https://github.com/openstack-ansible/openstack-ansible-modules.git
+       dest={{ playbook_dir }}/openstack-ansible-modules

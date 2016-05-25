@@ -20,7 +20,6 @@
     tenant: "{{ swift_default_tenant  }}" 
     user: "{{ swift_default_user_name  }}"
     password: "{{ swift_default_user_password }}"
-  delegate_to: "{{ groups['keystone'][0] }}"
   run_once: true
 
 - name: add swift service user to the service tenant with the admin role
@@ -30,7 +29,6 @@
     tenant: "{{ swift_default_tenant  }}"
     user: "{{ swift_default_user_name  }}"
     role: admin
-  delegate_to: "{{ groups['keystone'][0] }}"
   run_once: true   
 
 - name: add swift endpoints to keystone
@@ -44,5 +42,6 @@
     admin_url:  "http://{{ swift_management_endpoint }}:{{ proxy_port }}/v1/AUTH_%(tenant_id)s"
     internal_url:  "http://{{ swift_internal_endpoint }}:{{ proxy_port }}/v1/AUTH_%(tenant_id)s"
     public_url:  "http://{{ swift_public_endpoint }}:{{ proxy_port }}/v1/AUTH_%(tenant_id)s"
-  delegate_to: "{{ groups['keystone'][0] }}"
+    ignore_other_regions: 1
+    insecure: 1
   when: not swift_keystone_fake_load_balance

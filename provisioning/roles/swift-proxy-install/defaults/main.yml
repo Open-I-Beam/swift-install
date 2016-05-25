@@ -38,7 +38,8 @@ proxy_server_cors_allow_origin: " "
 proxy_server_client_timeout: 60
 proxy_server_eventlet_debug: false
 
-proxy_server_main_pipeline: "catch_errors gatekeeper healthcheck proxy-logging cache container_sync bulk slo ratelimit authtoken keystoneauth  container-quotas account-quotas proxy-logging proxy-server"
+proxy_server_main_pipeline: "catch_errors gatekeeper healthcheck proxy-logging cache container_sync bulk tempurl ratelimit authtoken keystoneauth container-quotas account-quotas storlet_handler slo dlo versioned_writes proxy-logging proxy-server"
+
 
 proxy_server_log_handoffs: true
 proxy_server_recheck_account_existence: 60
