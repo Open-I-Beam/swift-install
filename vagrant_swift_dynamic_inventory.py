@@ -238,7 +238,7 @@ def main():
 
     if args.ips:
         out = inventory.ips
-    print json.dumps(out)
+    print(json.dumps(out))
 
 
 if __name__ == '__main__':
